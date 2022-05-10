@@ -85,14 +85,14 @@ WSGI_APPLICATION = 'hi_day_b06.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+DATABASE_URL = 'postgres://zaxclxqxbnrfxb:134d7746e54c51f9a151c329971f118397c6a2399b2abd06965232e1d1dbf0ce@ec2-54-158-247-210.compute-1.amazonaws.com:5432/d4fickjamd63a9'
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(),
 }
 
-
+DATABASES['default'] = dj_database_url.config()
+DATABASES['default'] = dj_database_url.config(default=DATABASE_URL)
 
 
 if PRODUCTION:
