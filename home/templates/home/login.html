@@ -66,7 +66,7 @@
 
 </style>
 
-<title>Register</title>
+<title>Login</title>
 {% endblock meta %}
 
 {% block content %}
@@ -80,7 +80,7 @@
 
         <div id="registerbody">
             <h2>Email</h2> {{form.username}} <br>
-            <h2>Password</h2>{{form.password}} <br>
+            <h2>Password</h2>{{form.password2}} <br>
         </div>
 
         <div id="registererror">
@@ -89,8 +89,9 @@
             {% endfor %}
         </div>
     
-        <input type="submit" name="Create User" id="submitbutton">
-        <p id="loginbutton"> Already have an account? <a href=""> Login </a></p>
+        <input type="submit" name="Create User" id="submitbutton" value="Login">
+        <p id="loginbutton"> Don't have an account for Admin? <a href="{% url 'home:registeradmin' %}"> Register Admin</a></p>
+        <p id="loginbutton"> Don't have an account for Pengguna? <a href="{% url 'home:registerpengguna' %}"> Register Pengguna</a></p>
     </div>
 </form>
 {% endblock content %}
