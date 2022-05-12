@@ -53,6 +53,7 @@
         cursor: pointer;
         width: 25%;
         opacity: 0.9;
+        text-align: center;
     }
 
     #submitbutton:hover {
@@ -66,7 +67,7 @@
 
 </style>
 
-<title>Register</title>
+<title>Register Admin</title>
 {% endblock meta %}
 
 {% block content %}
@@ -80,7 +81,7 @@
 
         <div id="registerbody">
             <h2>Email</h2> {{form.username}} <br>
-            <h2>Password</h2>{{form.password}} <br>
+            <h2>Password</h2>{{form.password2}} <br>
         </div>
 
         <div id="registererror">
@@ -89,8 +90,8 @@
             {% endfor %}
         </div>
     
-        <input type="submit" name="Create User" id="submitbutton">
-        <p id="loginbutton"> Already have an account? <a href=""> Login </a></p>
+        <input type="submit" name="Create User" id="submitbutton" value="Register">
+        <p id="loginbutton"> Already have an account? <a href="{% url 'home:login' %}"> Login </a></p>
     </div>
 </form>
 {% endblock content %}
