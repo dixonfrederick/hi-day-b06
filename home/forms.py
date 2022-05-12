@@ -8,10 +8,10 @@ from . import models
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['username', 'password']
+        fields = ['username', 'password2']
 
     def __init__(self, *args, **kwargs):
         super(CreateUserForm, self).__init__(*args, **kwargs)
 
         self.fields['username'].widget.attrs['placeholder'] = 'Email'
-        self.fields['password'].widget.attrs['placeholder'] = 'Password'
+        self.fields['password2'].widget.attrs['placeholder'] = 'Password'

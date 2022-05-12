@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.db import connection
 from django.db.utils import IntegrityError, InterfaceError
 from django.db import connections
+from .forms import CreateUserForm
+from .forms2 import CreateUserForm2
+from .forms3 import CreateUserForm3
 
 # Create your views here.
 peran = ""
@@ -12,7 +15,8 @@ def index(request):
         return render(request, 'home/basePengguna.html')
 
 def login(request):
-    context = {}
+    form = CreateUserForm3(request.POST or None)
+    context = {'form':form}
     if request.method == "POST":
         email = request.POST["email"]
         password = request.POST["password"]
@@ -42,7 +46,7 @@ def login(request):
             context["error"] = "Error fetching data"
             return render(request, 'home/login.html', context)
         return redirect("home:index")
-    return render(request, 'home/login.html')
+    return render(request, 'home/login.html', context)
 
 def logout(request):
     if 'user_email' not in request.session or 'user_role' not in request.session:
@@ -53,9 +57,9 @@ def logout(request):
 def registeradmin(request):
     form = CreateUserForm(request.POST or None)
     context = {'form':form}
-    return render(request, 'home/registeradmin.html', context)
+    return render(request, 'home/registerAdmin.html', context)
 
 def registerpengguna(request):
     form = CreateUserForm2(request.POST or None)
     context = {'form':form}
-    return render(request, 'home/registerpengguna.html', context)
+    return render(request, 'home/registerPengguna.html', context)
