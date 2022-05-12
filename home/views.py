@@ -1,7 +1,9 @@
+import email
 import imp
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.db import connection
+from collections import namedtuple
 from django.db.utils import IntegrityError, InterfaceError
 from django.db import connections
 from .forms import *
@@ -10,12 +12,10 @@ from .forms3 import *
 from .loginForms import *
 
 # Create your views here.
-role = ""
-def index(request):
-    if role == "pengguna":
-        return render(request, 'home/baseAdmin.html')
-    elif role == "admin":
-        return render(request, 'home/basePengguna.html')
+def namedtuplefetchall(cursor):
+    desc = cursor.description
+    nt_result = namedtuple('Result', [col[0] for col in desc])
+    return [nt_result(*row) for row in cursor.fetchall()]
 
 def login(request):
     MyForm = LoginForm(request.POST)
@@ -68,7 +68,23 @@ def home(request):
     cursor.execute("SET search_path TO public")
     if request.session.has_key('email'):
         role = request.session ['role']
-        return render (request, 'home/home.html', {'role': role})
+        email = request.session ['email']
+        if (role == "pengguna"):
+            try:
+                cursor.execute("SET SEARCH_PATH TO hidayb06")
+                cursor.execute("SELECT * FROM pengguna WHERE email = %s", [email])
+                result = namedtuplefetchall(cursor)
+            except Exception as e:
+                print(e)
+            return render (request, 'home/homePengguna.html', {'result': result})
+        elif (role == "admin"):
+            try:
+                cursor.execute("SET SEARCH_PATH TO hidayb06")
+                cursor.execute("SELECT * FROM admin WHERE email = %s", [email])
+                result = namedtuplefetchall(cursor)
+            except Exception as e:
+                print(e)
+            return render (request, 'home/homeAdmin.html', {'result': result})
     else:
         return render(request, 'home/login.html')
 

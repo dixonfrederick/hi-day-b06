@@ -1,0 +1,19 @@
+{% extends "home/baseAdmin.html" %}
+{% load static %}
+
+{% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'home/style.css' %}">
+    <title>HI-DAY</title>
+{% endblock head %}
+
+{% block content %}
+    <h1>B06 HIDAY</h1>
+    <h1>Hello</h1>
+    {% for res in result %}
+    <p>Email :  {{ res.email }} </p> 
+    {% endfor %}
+{% endblock content %}
+
+
