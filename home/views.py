@@ -1,11 +1,13 @@
+import imp
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.db import connection
 from django.db.utils import IntegrityError, InterfaceError
 from django.db import connections
-from forms import *
-from forms2 import *
-from forms3 import *
+from .forms import *
+from .forms2 import *
+from .forms3 import *
+from .loginForms import *
 
 # Create your views here.
 role = ""
@@ -16,7 +18,7 @@ def index(request):
         return render(request, 'home/basePengguna.html')
 
 def login(request):
-    MyForm = CreateUserForm3(request.POST)
+    MyForm = LoginForm(request.POST)
     cursor = connection.cursor();            
     cursor.execute("SET SEARCH_PATH TO hidayb06")
     # Form submission
@@ -71,10 +73,12 @@ def home(request):
         return render(request, 'home/login.html')
 
 def logout(request):
-    if 'user_email' not in request.session or 'user_role' not in request.session:
-        return redirect('home:login')
-    request.session.flush()
-    return redirect('home:login')
+    try:
+        del request.session['email']
+        del request.session['role']
+    except:
+        pass
+    return HttpResponseRedirect('/')
 
 def registeradmin(request):
     form = CreateUserForm(request.POST or None)

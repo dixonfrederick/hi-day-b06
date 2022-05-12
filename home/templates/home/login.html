@@ -25,7 +25,7 @@
 
     }
 
-    input[type=text], input[type=password] {
+    input[type=text], input[type=password] input[type=email] {
         width: 80%;
         padding: 15px;
         margin: 25px 0 22px 0;
@@ -75,12 +75,14 @@
         {% csrf_token %}
 
         <div id="registerhead">
-            <h5>FORM LOGIN</h1>
+            <h5>FORM LOGIN</h5>
         </div>
 
         <div id="registerbody">
-            <h2>Email</h2> {{form.username}} <br>
-            <h2>Password</h2>{{form.password2}} <br>
+            <h2>Email</h2> 
+            <p><input type="email" name="email"></p>
+            <h2>Password</h2>
+            <p><input type="password" name="password"></p>
         </div>
 
         <div id="registererror">
