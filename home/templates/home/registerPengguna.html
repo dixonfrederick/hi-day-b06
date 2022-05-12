@@ -1,0 +1,97 @@
+{% block meta %}
+<style>
+    #container {
+        background-color: #AC3834;
+        border-radius: 12px;
+        position: relative;
+        top: 100px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 25%;
+        font-size: 20px;   
+        text-align: center;
+        margin-bottom: 48px;
+
+    }
+
+    #registerhead {
+        font-size: 24px;
+        color: white;
+        background-color: #811112;
+        height: 70px;
+        text-align: center;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+
+    }
+
+    input[type=text], input[type=password] {
+        width: 80%;
+        padding: 15px;
+        margin: 25px 0 22px 0;
+        display: inline-block;
+        border: none;
+        background: #EDE0D0;
+    }
+
+    input[type=text]:focus, input[type=password]:focus {
+        background-color: #ddd;
+        outline: none;
+    }
+
+    #registerbody {
+        font-size: 12px;
+        text-align: center;
+    }
+
+    #submitbutton {
+        background-color: #811112;
+        color: white;
+        padding: 16px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 25%;
+        opacity: 0.9;
+    }
+
+    #submitbutton:hover {
+        opacity: 1;
+    }
+
+    #loginbutton {
+        padding: 16px 20px;
+        color: #EDE0D0;
+    }
+
+</style>
+
+<title>Register</title>
+{% endblock meta %}
+
+{% block content %}
+<form method="POST" action="">
+    <div id="container">
+        {% csrf_token %}
+
+        <div id="registerhead">
+            <h5>FORM REGISTRASI PENGGUNA</h1>
+        </div>
+
+        <div id="registerbody">
+            <h2>Email</h2> {{form.username}} <br>
+            <h2>Password</h2>{{form.password}} <br>
+            <h2>Nama Area Pertanian</h2>{{form.username}} <br>
+        </div>
+
+        <div id="registererror">
+            {% for message in messages %}
+            <p>{{message}}</p>
+            {% endfor %}
+        </div>
+    
+        <input type="submit" name="Create User" id="submitbutton">
+        <p id="loginbutton"> Already have an account? <a href=""> Login </a></p>
+    </div>
+</form>
+{% endblock content %}
