@@ -3,9 +3,9 @@ from django.shortcuts import render, redirect
 from django.db import connection
 from django.db.utils import IntegrityError, InterfaceError
 from django.db import connections
-from loginForms import *
 from forms import *
 from forms2 import *
+from forms3 import *
 
 # Create your views here.
 role = ""
@@ -16,7 +16,7 @@ def index(request):
         return render(request, 'home/basePengguna.html')
 
 def login(request):
-    MyForm = LoginForm(request.POST)
+    MyForm = CreateUserForm3(request.POST)
     cursor = connection.cursor();            
     cursor.execute("SET SEARCH_PATH TO hidayb06")
     # Form submission
