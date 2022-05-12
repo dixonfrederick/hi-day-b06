@@ -49,3 +49,13 @@ def logout(request):
         return redirect('main:login')
     request.session.flush()
     return redirect('main:login')
+
+def registeradmin(request):
+    form = CreateUserForm(request.POST or None)
+    context = {'form':form}
+    return render(request, 'home/registeradmin.html', context)
+
+def registerpengguna(request):
+    form = CreateUserForm2(request.POST or None)
+    context = {'form':form}
+    return render(request, 'home/registerpengguna.html', context)
