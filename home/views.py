@@ -1,52 +1,74 @@
+from django.http.response import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.db import connection
 from django.db.utils import IntegrityError, InterfaceError
 from django.db import connections
-from .forms import CreateUserForm
-from .forms2 import CreateUserForm2
-from .forms3 import CreateUserForm3
+from loginForms import *
+from forms import *
+from forms2 import *
 
 # Create your views here.
-peran = ""
+role = ""
 def index(request):
-    if peran == "pengguna":
+    if role == "pengguna":
         return render(request, 'home/baseAdmin.html')
-    elif peran == "admin":
+    elif role == "admin":
         return render(request, 'home/basePengguna.html')
 
 def login(request):
-    form = CreateUserForm3(request.POST or None)
-    context = {'form':form}
-    if request.method == "POST":
-        email = request.POST["email"]
-        password = request.POST["password"]
-        try:
-            with connection.cursor() as c:
-                c.execute("SET search_path to hidayb06;")
-                c.execute(f"select * from admin where email = '{email}' and password = '{password}';")
-                admin = c.fetchone()
-                c.execute(f"select * from pengguna where email = '{email}' and password = '{password}';")
-                pengguna = c.fetchone()
-                if admin != None or pengguna != None:
-                    c.execute(f"select * from admin where email = '{email}';")
-                    admin = c.fetchone()
-                    c.execute(f"select * from pengguna where email = '{email}';")
-                    pengguna = c.fetchone()
-                    if admin:
-                        peran = "admin"
-                    if pengguna:
-                        peran = "pengguna"
-                    
-                    request.session["user_email"] = email
-                    request.session["user_role"] = peran
-                else:
-                    context["error"] = "Wrong Email or Password"
-                    return render(request, 'registration/login.html', context)
-        except:
-            context["error"] = "Error fetching data"
-            return render(request, 'home/login.html', context)
-        return redirect("home:index")
-    return render(request, 'home/login.html', context)
+    MyForm = LoginForm(request.POST)
+    cursor = connection.cursor();            
+    cursor.execute("SET SEARCH_PATH TO hidayb06")
+    # Form submission
+    if (MyForm.is_valid() and request.method == 'POST'):
+        
+        # Define login form
+        email = MyForm.cleaned_data['email']
+        password = MyForm.cleaned_data['password']
+        cursor.execute("SELECT email FROM akun WHERE email = %s", [email]) 
+        result = cursor.fetchone()
+        try :
+            if(result == None): 
+                return HttpResponseNotFound("The user does not exist")
+                
+            if(result is not None):
+                cursor.execute("SELECT email from admin WHERE email = %s",[email])
+                admin = cursor.fetchone()
+
+                cursor.execute("SELECT email from pengguna WHERE email = %s",[email])
+                pengguna = cursor.fetchone()
+                
+                #Assignment untuk mengetahui role user
+                if(pengguna is not None):
+                    role = "pengguna"
+                    cursor.execute("SELECT email, password FROM pengguna WHERE email = %s AND password = %s", [email,password])
+                    verif_akun = cursor.fetchone()
+                elif (admin is not None):
+                    role = "admin"
+                    cursor.execute("SELECT email, password FROM admin WHERE email = %s AND password = %s", [email,password])
+                    verif_akun = cursor.fetchone()
+                if (verif_akun is not None):
+                    cursor.execute("SET SEARCH_PATH TO public")
+                    request.session['email'] = email
+                    request.session['role'] = role
+                    return redirect ("/home")
+        except Exception as e:
+            print(e)
+            cursor.close()
+        return redirect ("/login")
+
+    else:
+        cursor.execute("SET search_path TO public")
+        return render(request, 'home/login.html', {'form' : MyForm})
+
+def home(request):
+    cursor = connection.cursor()
+    cursor.execute("SET search_path TO public")
+    if request.session.has_key('email'):
+        role = request.session ['role']
+        return render (request, 'home/home.html', {'role': role})
+    else:
+        return render(request, 'home/login.html')
 
 def logout(request):
     if 'user_email' not in request.session or 'user_role' not in request.session:

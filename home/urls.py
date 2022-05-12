@@ -6,8 +6,8 @@ app_name = 'home'
 
 urlpatterns = [
     path('', login, name='login'),
-    path('home', index, name='index'),
     path('logout', logout, name='logout'),
+    path('home', home, name='home'),
     path('registeradmin', registeradmin, name='registeradmin'),
     path('registerpengguna', registerpengguna, name='registerpengguna'),
 
