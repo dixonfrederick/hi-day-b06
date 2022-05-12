@@ -40,15 +40,15 @@ def login(request):
                     return render(request, 'registration/login.html', context)
         except:
             context["error"] = "Error fetching data"
-            return render(request, 'registration/login.html', context)
-        return redirect("main:home")
-    return render(request, 'registration/login.html')
+            return render(request, 'home/login.html', context)
+        return redirect("home:index")
+    return render(request, 'home/login.html')
 
 def logout(request):
     if 'user_email' not in request.session or 'user_role' not in request.session:
-        return redirect('main:login')
+        return redirect('home:login')
     request.session.flush()
-    return redirect('main:login')
+    return redirect('home:login')
 
 def registeradmin(request):
     form = CreateUserForm(request.POST or None)
