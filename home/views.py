@@ -18,7 +18,7 @@ def login(request):
         password = request.POST["password"]
         try:
             with connection.cursor() as c:
-                c.execute("SET search_path to hiday;")
+                c.execute("SET search_path to hidayb06;")
                 c.execute(f"select * from admin where email = '{email}' and password = '{password}';")
                 admin = c.fetchone()
                 c.execute(f"select * from pengguna where email = '{email}' and password = '{password}';")
