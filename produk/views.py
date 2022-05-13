@@ -41,3 +41,30 @@ def listProduk(request):
         except Exception as e:
             print(e)
         return render (request, 'produk/listProdukAdmin.html', {'result': result})
+
+def listProduksi(request):
+    cursor = connection.cursor()
+    cursor.execute("SET search_path TO public")
+    role = request.session ['role']
+    if (role == "pengguna"):
+        try:
+            cursor.execute("SET SEARCH_PATH TO hidayb06")
+            cursor.execute("""SELECT PR.NAMA AS PRODUK_MAKANAN, A.NAMA AS ALAT_PRODUKSI, P.DURASI, P.JUMLAH_UNIT_HASIL
+            FROM PRODUKSI P, PRODUK PR, ASET A
+            WHERE P.ID_ALAT_PRODUKSI = A.ID AND P.ID_PRODUK_MAKANAN = PR.ID;""")
+            result = namedtuplefetchall(cursor)
+        except Exception as e:
+            print(e)
+        return render (request, 'produk/listProduksiPengguna.html', {'result': result})
+    elif (role == "admin"):
+        try:
+            cursor.execute("SET SEARCH_PATH TO hidayb06")
+            cursor.execute("""SELECT PR.NAMA AS PRODUK_MAKANAN, A.NAMA AS ALAT_PRODUKSI, P.DURASI, P.JUMLAH_UNIT_HASIL
+            FROM PRODUKSI P, PRODUK PR, ASET A
+            WHERE P.ID_ALAT_PRODUKSI = A.ID AND P.ID_PRODUK_MAKANAN = PR.ID;""")
+            result = namedtuplefetchall(cursor)
+        except Exception as e:
+            print(e)
+        return render (request, 'produk/listProduksiAdmin.html', {'result': result})
+
+    
