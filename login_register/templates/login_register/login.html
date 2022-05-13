@@ -92,8 +92,8 @@
         </div>
     
         <input type="submit" name="Create User" id="submitbutton" value="Login">
-        <p id="loginbutton"> Don't have an account for Admin? <a href="{% url 'home:registeradmin' %}"> Register Admin</a></p>
-        <p id="loginbutton"> Don't have an account for Pengguna? <a href="{% url 'home:registerpengguna' %}"> Register Pengguna</a></p>
+        <p id="loginbutton"> Don't have an account for Admin? <a href="{% url 'login_register:registeradmin' %}"> Register Admin</a></p>
+        <p id="loginbutton"> Don't have an account for Pengguna? <a href="{% url 'login_register:registerpengguna' %}"> Register Pengguna</a></p>
     </div>
 </form>
 {% endblock content %}
