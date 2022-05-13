@@ -1,0 +1,51 @@
+{% extends "home/baseAdmin.html" %}
+{% load static %}
+
+{% block head %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <title>Histori Produk Makanan</title>
+{% endblock head %}
+
+{% block content %}
+<div class="container-md">
+  <div class="d-grid gap-3">
+    <div class="p-2 bg-light border">
+      <div class="mx-auto" style="width: 500px;">
+        <h1>Histori Produk Makanan</h1>
+      </div>
+    </div>
+    <div class="p-2 bg-light border">
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Email Pengguna</th>
+            <th scope="col">Waktu Awal</th>
+            <th scope="col">Waktu Selesai</th>
+            <th scope="col">Jumlah</th>
+            <th scope="col">XP</th>
+            <th scope="col">Produk Makanan</th>
+            <th scope="col">Alat Produksi</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for res in result %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ res.email }}</td>
+              <td>{{ res.waktu_awal }}</td>
+              <td>{{ res.waktu_selesai }}</td>
+              <td>{{ res.jumlah }}</td>
+              <td>{{ res.xp }}</td>
+              <td>{{ res.nama_produk }}</td>
+              <td>{{ res.nama_aset }}</td>
+            </tr>
+            {% endfor %} 
+          <tr>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock content %}

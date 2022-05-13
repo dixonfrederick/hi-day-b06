@@ -22,5 +22,6 @@ urlpatterns = [
     path('login_register/', include('login_register.urls')),
     path('home/', include('home.urls')),
     path('produk/', include('produk.urls')),
+    path('histori_produksi/', include('histori_produksi.urls')),
     re_path(r'^$', index, name='index'),
 ]
