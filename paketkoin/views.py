@@ -31,7 +31,7 @@ def readpaketkoinadmin(request):
     if (role == "admin"):
         try:
             cursor.execute("SET SEARCH_PATH TO hidayb06")
-            cursor.execute("SELECT Jumlah_Koin, Harga FROM paket_koin")
+            cursor.execute("SELECT paket_koin.Jumlah_Koin, paket_koin.Harga FROM paket_koin")
             result = namedtuplefetchall(cursor)
         except Exception as e:
             print(e)
@@ -45,7 +45,7 @@ def readpaketkoinpengguna(request):
     if (role == "pengguna"):
         try:
             cursor.execute("SET SEARCH_PATH TO hidayb06")
-            cursor.execute("SELECT Jumlah_Koin, Harga FROM paket_koin")
+            cursor.execute("SELECT paket_koin.Jumlah_Koin, paket_koin.Harga FROM paket_koin")
             result = namedtuplefetchall(cursor)
         except Exception as e:
             print(e)
