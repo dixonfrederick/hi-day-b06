@@ -4,7 +4,6 @@ from django.http.response import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.db import connection
 from django.db.utils import IntegrityError, InterfaceError
-from django.db import connections
 from .forms import *
 from .forms2 import *
 
