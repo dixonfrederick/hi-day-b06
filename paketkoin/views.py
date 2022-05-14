@@ -26,27 +26,31 @@ def deletepaketkoinadmin(request):
 
 def readpaketkoinadmin(request):
     cursor = connection.cursor()
-    try:
-        cursor.execute("SET SEARCH_PATH to public")
-        cursor.execute("SET SEARCH_PATH TO hidayb06")
-        cursor.execute("SELECT Jumlah_Koin, Harga FROM paket_koin")
-        result = namedtuplefetchall(cursor)
-    except Exception as e:
-        print(e)
-    
-    return render(request, 'paketkoin/readPaketKoinAdmin.html', {'result':result})
+    cursor.execute("SET SEARCH_PATH to public")
+    role = request.session ['role']
+    if (role == "admin"):
+        try:
+            cursor.execute("SET SEARCH_PATH TO hidayb06")
+            cursor.execute("SELECT Jumlah_Koin, Harga FROM paket_koin")
+            result = namedtuplefetchall(cursor)
+        except Exception as e:
+            print(e)
+
+        return render(request, 'paketkoin/readPaketKoinPengguna.html', {'result':result})
 
 def readpaketkoinpengguna(request):
     cursor = connection.cursor()
-    try:
-        cursor.execute("SET SEARCH_PATH to public")
-        cursor.execute("SET SEARCH_PATH TO hidayb06")
-        cursor.execute("SELECT Jumlah_Koin, Harga FROM paket_koin")
-        result = namedtuplefetchall(cursor)
-    except Exception as e:
-        print(e)
+    cursor.execute("SET SEARCH_PATH to public")
+    role = request.session ['role']
+    if (role == "pengguna"):
+        try:
+            cursor.execute("SET SEARCH_PATH TO hidayb06")
+            cursor.execute("SELECT Jumlah_Koin, Harga FROM paket_koin")
+            result = namedtuplefetchall(cursor)
+        except Exception as e:
+            print(e)
 
-    return render(request, 'paketkoin/readPaketKoinPengguna.html', {'result':result})
+        return render(request, 'paketkoin/readPaketKoinPengguna.html', {'result':result})
 
 def updatepaketkoinadmin(request):
     form = UpdatePaketKoinAdminForm(request.POST or None)
