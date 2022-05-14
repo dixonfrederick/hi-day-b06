@@ -28,9 +28,9 @@ def deletepaketkoinadmin(request):
 def readpaketkoinadmin(request):
     cursor = connection.cursor()
     try:
-        # cursor.execute("SET SEARCH_PATH to public")
+        cursor.execute("SET SEARCH_PATH to public")
         cursor.execute("SET SEARCH_PATH TO hidayb06")
-        cursor.execute("SELECT * FROM paket_koin")
+        cursor.execute("SELECT Jumlah_Koin, Harga FROM paket_koin")
         result = namedtuplefetchall(cursor)
     except Exception as e:
         print(e)
@@ -40,9 +40,9 @@ def readpaketkoinadmin(request):
 def readpaketkoinpengguna(request):
     cursor = connection.cursor()
     try:
-        # cursor.execute("SET SEARCH_PATH to public")
+        cursor.execute("SET SEARCH_PATH to public")
         cursor.execute("SET SEARCH_PATH TO hidayb06")
-        cursor.execute("SELECT * FROM paket_koin")
+        cursor.execute("SELECT Jumlah_Koin, Harga FROM paket_koin")
         result = namedtuplefetchall(cursor)
     except Exception as e:
         print(e)
