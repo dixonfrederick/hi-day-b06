@@ -23,5 +23,6 @@ urlpatterns = [
     path('home/', include('home.urls')),
     path('produk/', include('produk.urls')),
     path('histori_produksi/', include('histori_produksi.urls')),
+    path('paketkoin/', include('paketkoin.urls')),
     re_path(r'^$', index, name='index'),
 ]

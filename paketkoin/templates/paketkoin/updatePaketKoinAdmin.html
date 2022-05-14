@@ -1,0 +1,100 @@
+{% extends "home/baseAdmin.html" %}
+{% block meta %}
+<style>
+    #container {
+        background-color: #AC3834;
+        border-radius: 12px;
+        position: relative;
+        top: 100px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 25%;
+        font-size: 20px;   
+        text-align: center;
+        margin-bottom: 48px;
+
+    }
+
+    #registerhead {
+        font-size: 24px;
+        color: white;
+        background-color: #811112;
+        height: 70px;
+        text-align: center;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+
+    }
+
+    input[type=text], input[type=password] {
+        width: 80%;
+        padding: 15px;
+        margin: 25px 0 22px 0;
+        display: inline-block;
+        border: none;
+        background: #EDE0D0;
+    }
+
+    input[type=text]:focus, input[type=password]:focus {
+        background-color: #ddd;
+        outline: none;
+    }
+
+    #registerbody {
+        font-size: 12px;
+        text-align: center;
+    }
+
+    #submitbutton {
+        background-color: #811112;
+        color: white;
+        padding: 16px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 25%;
+        opacity: 0.9;
+        text-align: center;
+    }
+
+    #submitbutton:hover {
+        opacity: 1;
+    }
+
+    #loginbutton {
+        padding: 16px 20px;
+        color: #EDE0D0;
+    }
+
+</style>
+
+<title>Update Paket Koin (Admin)</title>
+{% endblock meta %}
+
+{% block content %}
+<form method="POST" action="">
+    <div id="container">
+        {% csrf_token %}
+
+        <div id="registerhead">
+            <h5>FORM UBAH PAKET KOIN (ADMIN)</h1>
+        </div>
+
+        <div id="registerbody">
+            <h3>Jumlah Koin</h3>
+            <p><input type="jumlah_koin" name="jumlah_koin"></p>
+            <h3>Harga</h3>
+            <p><input type="harga" name="harga"></p>
+        </div>
+
+        <div id="registererror">
+            {% for message in messages %}
+            <p>{{message}}</p>
+            {% endfor %}
+        </div>
+    
+        <input type="submit" name="Create User" id="submitbutton" value="Simpan">
+        <p><a href="{% url 'paketkoin:home' %}">Cancel</a></p>
+    </div>
+</form>
+{% endblock content %}
