@@ -36,7 +36,7 @@ def readpaketkoinadmin(request):
         except Exception as e:
             print(e)
 
-        return render(request, 'paketkoin/readPaketKoinPengguna.html', {'result':result})
+        return render(request, 'paketkoin/readPaketKoinAdmin.html', {'result':result})
 
 def readpaketkoinpengguna(request):
     cursor = connection.cursor()
