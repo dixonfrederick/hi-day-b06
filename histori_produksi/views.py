@@ -35,3 +35,6 @@ def historiProdukMakanan(request):
         except Exception as e:
             print(e)
         return render (request, 'histori_produksi/historiProdukMakananAdmin.html', {'result': result})    
+
+def produksiProdukMakanan(request):
+    return render (request, 'histori_produksi/produksiProdukMakanan.html')

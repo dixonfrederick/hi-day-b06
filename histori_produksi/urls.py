@@ -6,4 +6,5 @@ app_name = 'histori_produksi'
 
 urlpatterns = [
     path('historiprodukmakanan', historiProdukMakanan, name='historiProdukMakanan'),
+    path('produksiprodukmakanan', produksiProdukMakanan, name='produksiProdukMakanan'),
 ]
