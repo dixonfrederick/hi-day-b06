@@ -70,5 +70,24 @@ def listProduksi(request):
             print(e)
         return render (request, 'produk/listProduksiAdmin.html', {'result': result})
 
+def detailProduksi(request, makanan):
+    cursor = connection.cursor()
+    result = []
+    try:
+        cursor.execute("SET SEARCH_PATH TO hidayb06")
+        cursor.execute("""SELECT PR.NAMA AS PRODUK_MAKANAN, A.NAMA AS ALAT_PRODUKSI, EXTRACT (MINUTE FROM P.DURASI) AS DURASI, P.JUMLAH_UNIT_HASIL
+        FROM PRODUKSI P, PRODUK PR, ASET A
+        WHERE P.ID_ALAT_PRODUKSI = A.ID AND P.ID_PRODUK_MAKANAN = PR.ID;""")
+        # cursor.execute("SET SEARCH_PATH TO hidayb06")
+        # cursor.execute("""SELECT PR.NAMA AS PRODUK_MAKANAN, A.NAMA AS ALAT_PRODUKSI, EXTRACT (MINUTE FROM P.DURASI) AS DURASI, P.JUMLAH_UNIT_HASIL, PR.NAMA
+        # FROM PRODUKSI P, PRODUK PR, ASET A, LEFT JOIN PRODUK_DIBUTUHKAN_OLEH_PRODUK_MAKANAN PD 
+        # WHERE PR.NAMA = %s , PD.ID_PRODUK_MAKANAN = PR.ID""", [makanan])
+        result = namedtuplefetchall(cursor)
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+    return render(request, 'produk/detailProduksi.html', {'result': result})
+
 def buatProduksi(request):
     return render (request, 'produk/buatProduksi.html')
