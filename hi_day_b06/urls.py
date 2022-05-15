@@ -26,5 +26,6 @@ urlpatterns = [
     path('paketkoin/', include('paketkoin.urls')),
     path('transaksipembeliankoin/', include('transaksipembeliankoin.urls')),
     path('transaksiupgradelumbung/', include('transaksiupgradelumbung.urls')),
+    path('historitanaman/', include('historitanaman.urls')),
     re_path(r'^$', index, name='index'),
 ]
