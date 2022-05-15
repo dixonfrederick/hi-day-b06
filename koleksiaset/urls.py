@@ -5,6 +5,5 @@ from .views import *
 app_name = 'koleksiaset'
 
 urlpatterns = [
-    path('readkoleksiasetadmin', readkoleksiasetadmin, name='readkoleksiasetadmin'),
-    path('readkoleksiasetpengguna', readkoleksiasetpengguna, name='readkoleksiasetpengguna')
+    path('listkoleksi', listkoleksi, name='listkoleksi')
 ]
