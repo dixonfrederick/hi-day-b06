@@ -66,39 +66,63 @@
         color: #EDE0D0;
     }
 
+    h3{
+        text-align: center;
+    }
+
+    table {
+        border-collapse: collapse;
+        counter-reset: noElm;
+    }
+
+    th, td {
+        padding: .2em .7em;
+        border: 1px solid black;
+    }
+
+    tbody tr {
+        counter-increment: noElm;
+    }
+
+    td:nth-of-type(1):before {
+        content: counter(noElm);
+    }
+
+    th:nth-of-type(1), td:nth-of-type(1) {
+        display: none;
+    }
+
+    @media print {
+        th:nth-of-type(1), td:nth-of-type(1) {
+            display: table-cell;
+        }
+    }
+
 </style>
 
-<title>Create Transaksi Pembelian Koin (Pengguna)</title>
+<title>Read Transaksi Upgrade Lumbung (Pengguna)</title>
 {% endblock meta %}
 
 {% block content %}
-<form method="POST" action="">
-    <div id="container">
-        {% csrf_token %}
 
-        <div id="registerhead">
-            <h5>FORM PEMBELIAN PAKET KOIN (PENGGUNA)</h1>
-        </div>
-
-        <div id="registerbody">
-            <h3>Paket Koin</h3>
-            <p><input type="paket_koin" name="paket_koin"></p>
-            <h3>Harga</h3>
-            <p><input type="harga" name="harga"></p>
-            <h3>Jumlah</h3>
-            <p><input type="jumlah" name="jumlah"></p>
-            <h3>Cara Pembayaran</h3>
-            <p><input type="cara_pembayaran" name="cara_pembayaran"></p>
-        </div>
-
-        <div id="registererror">
-            {% for message in messages %}
-            <p>{{message}}</p>
+<body>
+    <h3>List Transaksi Upgrade Lumbung (Pengguna)</h3>
+    <table style="border:1px solid black; margin-left:auto; margin-right:auto;">
+        <thead>
+            <tr>
+                <th scope="col" style="text-align: center"><b>No</b></th>
+                <th scope="col" style="text-align: center"><b>Waktu Upgrade</b></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for res in result %}
+                <tr>
+                    <td style="text-align: center">{{ forloop.counter }}</td>
+                    <td style="text-align: center">{{ res.Waktu_Upgrade }}</td>
+                </tr>
             {% endfor %}
-        </div>
-    
-        <input type="submit" name="Create User" id="submitbutton" value="Beli">
-        <p><a href="{% url 'paketkoin:home' %}">Cancel</a></p>
-    </div>
-</form>
+        </tbody>
+    </table>
+</body>
+
 {% endblock content %}

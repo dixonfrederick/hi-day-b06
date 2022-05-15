@@ -68,7 +68,7 @@
 
 </style>
 
-<title>Create Transaksi Pembelian Koin (Pengguna)</title>
+<title>Create Transaksi Upgrade Lumbung (Pengguna)</title>
 {% endblock meta %}
 
 {% block content %}
@@ -77,18 +77,16 @@
         {% csrf_token %}
 
         <div id="registerhead">
-            <h5>FORM PEMBELIAN PAKET KOIN (PENGGUNA)</h1>
+            <h5>UPGRADE LUMBUNG (PENGGUNA)</h1>
         </div>
 
         <div id="registerbody">
-            <h3>Paket Koin</h3>
-            <p><input type="paket_koin" name="paket_koin"></p>
-            <h3>Harga</h3>
-            <p><input type="harga" name="harga"></p>
-            <h3>Jumlah</h3>
-            <p><input type="jumlah" name="jumlah"></p>
-            <h3>Cara Pembayaran</h3>
-            <p><input type="cara_pembayaran" name="cara_pembayaran"></p>
+            <h3>Level Lumbung</h3>
+            <p><input type="level_lumbung" name="level_lumbung"></p>
+            <h3>Kapasitas Lumbung</h3>
+            <p><input type="kapasitas_lumbung" name="kapasitas_lumbung"></p>
+            <h3>Biaya Upgrade</h3>
+            <p><input type="biaya_upgrade" name="biaya_upgrade"></p>
         </div>
 
         <div id="registererror">
@@ -97,7 +95,7 @@
             {% endfor %}
         </div>
     
-        <input type="submit" name="Create User" id="submitbutton" value="Beli">
+        <input type="submit" name="Create User" id="submitbutton" value="Upgrade">
         <p><a href="{% url 'paketkoin:home' %}">Cancel</a></p>
     </div>
 </form>

@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'login_register',
     'produk',
     'paketkoin',
-    'transaksipembeliankoin'
+    'transaksipembeliankoin',
+    'transaksiupgradelumbung'
 ]
 
 MIDDLEWARE = [
