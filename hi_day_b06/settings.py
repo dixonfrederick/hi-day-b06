@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'home',
     'login_register',
     'produk',
-    'paketkoin'
+    'paketkoin',
+    'transaksipembeliankoin'
 ]
 
 MIDDLEWARE = [

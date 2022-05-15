@@ -100,29 +100,33 @@
 
 </style>
 
-<title>Read Paket Koin (Pengguna)</title>
+<title>Read Transaksi Pembelian Koin (Pengguna)</title>
 {% endblock meta %}
 
 {% block content %}
 
 <body>
-    <h3>List Paket Koin (Pengguna)</h3>
+    <h3>List Transaksi Pembelian Koin (Pengguna)</h3>
     <table style="border:1px solid black; margin-left:auto; margin-right:auto;">
         <thead>
             <tr>
                 <th scope="col" style="text-align: center"><b>No</b></th>
+                <th scope="col" style="text-align: center"><b>Waktu Pembelian</b></th>
+                <th scope="col" style="text-align: center"><b>Jumlah</b></th>
+                <th scope="col" style="text-align: center"><b>Cara Pembayaran</b></th>
                 <th scope="col" style="text-align: center"><b>Paket Koin</b></th>
-                <th scope="col" style="text-align: center"><b>Harga</b></th>
-                <th scope="col" style="text-align: center"><b>Action</b></th>
+                <th scope="col" style="text-align: center"><b>Total Biaya</b></th>
             </tr>
         </thead>
         <tbody>
             {% for res in result %}
                 <tr>
                     <td style="text-align: center">{{ forloop.counter }}</td>
-                    <td style="text-align: center">{{ res.Jumlah_Koin }}</td>
-                    <td style="text-align: center">{{ res.Harga }}</td>
-                    <td style="text-align: center"><a href="{% url 'transaksipembeliankoin:createtransaksipembeliankoinpengguna' %}">Beli</a></td>
+                    <td style="text-align: center">{{ res.Waktu_Pembelian }}</td>
+                    <td style="text-align: center">{{ res.Jumlah }}</td>
+                    <td style="text-align: center">{{ res.Cara_Pembayaran }}</td>
+                    <td style="text-align: center">{{ res.Paket_Koin }}</td>
+                    <td style="text-align: center">{{ res.Total_Biaya }}</td>
                 </tr>
             {% endfor %}
         </tbody>
