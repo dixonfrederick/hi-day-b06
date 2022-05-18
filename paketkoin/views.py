@@ -1,3 +1,4 @@
+import email
 from collections import namedtuple
 import imp
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
@@ -8,8 +9,6 @@ from .forms import *
 from .forms2 import *
 
 # Create your views here.
-role = ""
-
 def namedtuplefetchall(cursor):
     desc = cursor.description
     nt_result = namedtuple('Result', [col[0] for col in desc])
@@ -26,12 +25,13 @@ def deletepaketkoinadmin(request):
 
 def readpaketkoinadmin(request):
     cursor = connection.cursor()
-    cursor.execute("SET SEARCH_PATH to public")
+    cursor.execute("SET search_path TO public")
     role = request.session ['role']
+    userEmail = request.session ['email']
     if (role == "admin"):
         try:
             cursor.execute("SET SEARCH_PATH TO hidayb06")
-            cursor.execute("SELECT paket_koin.Jumlah_Koin, paket_koin.Harga FROM paket_koin")
+            cursor.execute("""SELECT JUMLAH_KOIN, HARGA FROM PAKET_KOIN;""")
             result = namedtuplefetchall(cursor)
         except Exception as e:
             print(e)
@@ -40,12 +40,13 @@ def readpaketkoinadmin(request):
 
 def readpaketkoinpengguna(request):
     cursor = connection.cursor()
-    cursor.execute("SET SEARCH_PATH to public")
+    cursor.execute("SET search_path TO public")
     role = request.session ['role']
+    userEmail = request.session ['email']
     if (role == "pengguna"):
         try:
             cursor.execute("SET SEARCH_PATH TO hidayb06")
-            cursor.execute("SELECT paket_koin.Jumlah_Koin, paket_koin.Harga FROM paket_koin")
+            cursor.execute("""SELECT JUMLAH_KOIN, HARGA FROM PAKET_KOIN;""")
             result = namedtuplefetchall(cursor)
         except Exception as e:
             print(e)
