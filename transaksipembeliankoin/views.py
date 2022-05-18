@@ -26,7 +26,7 @@ def readtransaksipembeliankoinadmin(request):
     if (role == "admin"):
         try:
             cursor.execute("SET SEARCH_PATH TO hidayb06")
-            cursor.execute("""SELECT EMAIL, WAKTU, JUMLAH, CARA_PEMBAYARAN, PAKET_KOIN, TOTAL_BIAYA FROM TRANSAKSI_PEMBELIAN_KOIN;""")
+            cursor.execute("""SELECT EMAIL, WAKTU, JUMLAH, CARA_PEMBAYARAN, PAKET_KOIN, TOTAL_BIAYA FROM TRANSAKSI_PEMBELIAN_KOIN WHERE TRANSAKSI_PEMBELIAN_KOIN.EMAIL IN (SELECT PENGGUNA.EMAIL FROM PENGGUNA);""")
             result = namedtuplefetchall(cursor)
         except Exception as e:
             print(e)
