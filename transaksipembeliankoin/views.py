@@ -1,3 +1,4 @@
+import email
 from collections import namedtuple
 import imp
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
@@ -7,8 +8,6 @@ from django.db.utils import IntegrityError, InterfaceError
 from .forms import *
 
 # Create your views here.
-role = ""
-
 def namedtuplefetchall(cursor):
     desc = cursor.description
     nt_result = namedtuple('Result', [col[0] for col in desc])
@@ -21,12 +20,13 @@ def createtransaksipembeliankoinpengguna(request):
 
 def readtransaksipembeliankoinadmin(request):
     cursor = connection.cursor()
-    cursor.execute("SET SEARCH_PATH to public")
+    cursor.execute("SET search_path TO public")
     role = request.session ['role']
+    userEmail = request.session['email']
     if (role == "admin"):
         try:
             cursor.execute("SET SEARCH_PATH TO hidayb06")
-            cursor.execute("SELECT transaksi_pembelian_koin.Email, transaksi_pembelian_koin.Waktu, transaksi_pembelian_koin.Jumlah, transaksi_pembelian_koin.Cara_Pembayaran, transaksi_pembelian_koin.Paket_Koin, transaksi_pembelian_koin.Total_Biaya FROM transaksi_pembelian_koin")
+            cursor.execute("""SELECT EMAIL, WAKTU, JUMLAH, CARA_PEMBAYARAN, PAKET_KOIN, TOTAL_BIAYA FROM TRANSAKSI_PEMBELIAN_KOIN;""")
             result = namedtuplefetchall(cursor)
         except Exception as e:
             print(e)
@@ -35,12 +35,13 @@ def readtransaksipembeliankoinadmin(request):
 
 def readtransaksipembeliankoinpengguna(request):
     cursor = connection.cursor()
-    cursor.execute("SET SEARCH_PATH to public")
+    cursor.execute("SET search_path TO public")
     role = request.session ['role']
+    userEmail = request.session['email']
     if (role == "pengguna"):
         try:
             cursor.execute("SET SEARCH_PATH TO hidayb06")
-            cursor.execute("SELECT transaksi_pembelian_koin.Waktu, transaksi_pembelian_koin.Jumlah, transaksi_pembelian_koin.Cara_Pembayaran, transaksi_pembelian_koin.Paket_Koin, transaksi_pembelian_koin.Total_Biaya FROM transaksi_pembelian_koin")
+            cursor.execute("""SELECT WAKTU, JUMLAH, CARA_PEMBAYARAN, PAKET_KOIN, TOTAL_BIAYA FROM TRANSAKSI_PEMBELIAN_KOIN WHERE EMAIL = %s;""", [userEmail])
             result = namedtuplefetchall(cursor)
         except Exception as e:
             print(e)
