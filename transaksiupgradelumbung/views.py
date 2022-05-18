@@ -1,3 +1,4 @@
+import email
 from collections import namedtuple
 import imp
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
@@ -7,8 +8,6 @@ from django.db.utils import IntegrityError, InterfaceError
 from .forms import *
 
 # Create your views here.
-role = ""
-
 def namedtuplefetchall(cursor):
     desc = cursor.description
     nt_result = namedtuple('Result', [col[0] for col in desc])
@@ -21,12 +20,13 @@ def createtransaksiupgradelumbungpengguna(request):
 
 def readtransaksiupgradelumbungadmin(request):
     cursor = connection.cursor()
-    cursor.execute("SET SEARCH_PATH to public")
+    cursor.execute("SET search_path TO public")
     role = request.session ['role']
+    userEmail = request.session['email']
     if (role == "admin"):
         try:
             cursor.execute("SET SEARCH_PATH TO hidayb06")
-            cursor.execute("SELECT transaksi_upgrade_lumbung.Email, transaksi_upgrade_lumbung.Waktu FROM transaksi_upgrade_lumbung")
+            cursor.execute("""SELECT EMAIL, WAKTU FROM TRANSAKSI_UPGRADE_LUMBUNG;""")
             result = namedtuplefetchall(cursor)
         except Exception as e:
             print(e)
@@ -35,12 +35,13 @@ def readtransaksiupgradelumbungadmin(request):
 
 def readtransaksiupgradelumbungpengguna(request):
     cursor = connection.cursor()
-    cursor.execute("SET SEARCH_PATH to public")
+    cursor.execute("SET search_path TO public")
     role = request.session ['role']
+    userEmail = request.session['email']
     if (role == "pengguna"):
         try:
             cursor.execute("SET SEARCH_PATH TO hidayb06")
-            cursor.execute("SELECT transaksi_upgrade_lumbung.Waktu FROM transaksi_upgrade_lumbung")
+            cursor.execute("""SELECT WAKTU FROM TRANSAKSI_UPGRADE_LUMBUNG WHERE EMAIL = %s;""", [userEmail])
             result = namedtuplefetchall(cursor)
         except Exception as e:
             print(e)
