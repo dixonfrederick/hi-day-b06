@@ -20,7 +20,7 @@ def historiProdukMakanan(request):
             cursor.execute("SET SEARCH_PATH TO hidayb06;")
             cursor.execute("""SELECT HPM.EMAIL, HPM.WAKTU_AWAL, HP.WAKTU_SELESAI, HP.JUMLAH, HP.XP, P.NAMA AS NAMA_PRODUK, A.NAMA AS NAMA_ASET
             FROM HISTORI_PRODUKSI_MAKANAN HPM, HISTORI_PRODUKSI HP, PRODUK P, ASET A
-            WHERE HPM.EMAIL = %s AND HPM.ID_ALAT_PRODUKSI = A.ID AND HPM.ID_PRODUK_MAKANAN = P.ID;""", [email])
+            WHERE HPM.EMAIL = HP.EMAIL AND HPM.EMAIL = %s AND HPM.WAKTU_AWAL = HP.WAKTU_AWAL AND HPM.ID_ALAT_PRODUKSI = A.ID AND HPM.ID_PRODUK_MAKANAN = P.ID;""", [email])
             result = namedtuplefetchall(cursor)
         except Exception as e:
             print(e)
@@ -30,7 +30,7 @@ def historiProdukMakanan(request):
             cursor.execute("SET SEARCH_PATH TO hidayb06;")
             cursor.execute("""SELECT HPM.EMAIL, HPM.WAKTU_AWAL, HP.WAKTU_SELESAI, HP.JUMLAH, HP.XP, P.NAMA AS NAMA_PRODUK, A.NAMA AS NAMA_ASET
             FROM HISTORI_PRODUKSI_MAKANAN HPM, HISTORI_PRODUKSI HP, PRODUK P, ASET A
-            WHERE HPM.EMAIL = HP.EMAIL AND HPM.ID_ALAT_PRODUKSI = A.ID AND HPM.ID_PRODUK_MAKANAN = P.ID;""")
+            WHERE HPM.EMAIL = HP.EMAIL AND HPM.WAKTU_AWAL = HP.WAKTU_AWAL AND HPM.ID_ALAT_PRODUKSI = A.ID AND HPM.ID_PRODUK_MAKANAN = P.ID;""")
             result = namedtuplefetchall(cursor)
         except Exception as e:
             print(e)

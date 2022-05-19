@@ -55,11 +55,54 @@ def login(request):
         return render(request, 'login_register/login.html', {'form' : MyForm})
 
 def registeradmin(request):
-    form = CreateUserForm(request.POST or None)
-    context = {'form':form}
-    return render(request, 'login_register/registerAdmin.html', context)
+    myForm = RegisterAdminForm(request.POST)
+    cursor = connection.cursor()
+    cursor.execute("SET SEARCH_PATH TO hidayb06")
+    if (myForm.is_valid() and request.method == 'POST'):
+        role = "admin"
+        email = myForm.cleaned_data['email']
+        password = myForm.cleaned_data['password']
+        cursor.execute("SELECT EMAIL FROM ADMIN WHERE email = %s", [email]) 
+        result = cursor.fetchone()
+        if(result == None):
+            try:
+                cursor.execute("INSERT INTO AKUN VALUES (%s)", [email])
+                cursor.execute("INSERT INTO ADMIN (email,password) VALUES (%s,%s)", [email,password])
+                cursor.execute("SET SEARCH_PATH TO public")
+                request.session['email'] = email
+                request.session['role'] = role
+                return redirect ("/home")
+            except Exception as error:
+                print(error)
+        else:
+                message = "User already exist"
+                return render(request, 'login_register/registerAdmin.html', {'message':message})
+    else :
+        return render (request, 'login_register/registerAdmin.html', {'form':myForm})
 
 def registerpengguna(request):
-    form = CreateUserForm2(request.POST or None)
-    context = {'form':form}
-    return render(request, 'login_register/registerPengguna.html', context)
+    myForm = RegisterPenggunaForm(request.POST)
+    cursor = connection.cursor()
+    cursor.execute("SET SEARCH_PATH TO hidayb06")
+    if (myForm.is_valid() and request.method == 'POST'):
+        role = "pengguna"
+        email = myForm.cleaned_data['email']
+        password = myForm.cleaned_data['password']
+        nama_area_pertanian = myForm.cleaned_data['nama_area_pertanian']
+        cursor.execute("SELECT EMAIL FROM PENGGUNA WHERE email = %s", [email]) 
+        result = cursor.fetchone()
+        if(result == None):
+            try:
+                cursor.execute("INSERT INTO AKUN VALUES (%s)", [email])
+                cursor.execute("INSERT INTO PENGGUNA (email,password,nama_area_pertanian) VALUES (%s,%s,%s)", [email, password, nama_area_pertanian])
+                cursor.execute("SET SEARCH_PATH TO public")
+                request.session['email'] = email
+                request.session['role'] = role
+                return redirect ("/home")
+            except Exception as error:
+                print(error)
+        else:
+                message = "User already exist"
+                return render(request, 'login_register/registerPengguna.html', {'message':message})
+    else :
+        return render (request, 'login_register/registerPengguna.html', {'form':myForm})

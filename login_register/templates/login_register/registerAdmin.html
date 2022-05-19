@@ -25,7 +25,7 @@
 
     }
 
-    input[type=text], input[type=password] {
+    input[type=text] {
         width: 80%;
         padding: 15px;
         margin: 25px 0 22px 0;
@@ -80,8 +80,11 @@
         </div>
 
         <div id="registerbody">
-            <h2>Email</h2> {{form.username}} <br>
-            <h2>Password</h2>{{form.password2}} <br>
+            <h2>Email</h2>
+            <p><input type="email" name="email"></p>
+            <h2>Password</h2>
+            <p><input type="password" name="password"></p>
+            
         </div>
 
         <div id="registererror">
@@ -89,8 +92,7 @@
             <p>{{message}}</p>
             {% endfor %}
         </div>
-    
-        <input type="submit" name="Create User" id="submitbutton" value="Register">
+        <button type = "submit" value = "submit">Submit</button>
         <p id="loginbutton"> Already have an account? <a href="{% url 'login_register:login' %}"> Login </a></p>
     </div>
 </form>
