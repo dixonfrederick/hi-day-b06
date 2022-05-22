@@ -14,5 +14,4 @@ class CreateTransaksiPembelianKoinPenggunaForm(forms.Form):
     harga = forms.CharField(label='Harga')
     jumlah = forms.CharField(label='Jumlah')
     cara_pembayaran = forms.CharField(label='Cara Pembayaran')
-    email_pengguna = models.ForeignKey(User, on_delete=models.CASCADE)
     waktu_pembelian = models.DateTimeField(auto_now_add=True)

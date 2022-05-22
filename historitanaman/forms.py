@@ -13,6 +13,5 @@ class CreateHistoriTanamanPenggunaForm(forms.Form):
     bibit_tanaman = forms.CharField(label='Bibit Tanaman')
     jumlah = forms.CharField(label='Jumlah')
     xp = forms.CharField(label='XP')
-    email_pengguna = models.ForeignKey(User, on_delete=models.CASCADE)
     waktu_awal = models.DateTimeField(auto_now_add=True)
     waktu_selesai = waktu_awal

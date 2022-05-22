@@ -13,5 +13,4 @@ class CreateTransaksiUpgradeLumbungPenggunaForm(forms.Form):
     level_lumbung = forms.CharField(label='Level Lumbung')
     kapasitas_lumbung = forms.CharField(label='Kapasitas Lumbung')
     biaya_upgrade = forms.CharField(label='Biaya Upgrade')
-    email_pengguna = models.ForeignKey(User, on_delete=models.CASCADE)
     waktu_upgrade = models.DateTimeField(auto_now_add=True)
