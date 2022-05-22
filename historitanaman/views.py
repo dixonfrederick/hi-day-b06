@@ -15,8 +15,29 @@ def namedtuplefetchall(cursor):
 
 def createhistoritanamanpengguna(request):
     form = CreateHistoriTanamanPenggunaForm(request.POST or None)
-    context = {'form':form}
-    return render(request, 'historitanaman/createHistoriTanamanPengguna.html',context)
+    cursor = connection.cursor()
+    cursor.execute("SET SEARCH_PATH TO hidayb06")
+    role = request.session['role']
+    userEmail = request.session['email']
+    if (form.is_valid() and request.method == 'POST'):
+        bibit = form.cleaned_data['bibit_tanaman']
+        jumlah = form.cleaned_data['jumlah']
+        xp = form.cleaned_data['xp']
+        waktu_awal = form.cleaned_data['waktu_awal']
+        waktu_selesai = form.cleaned_data['waktu_selesai']
+        if ((bibit is not None) and (jumlah is not None) and (xp is not None) and (waktu_awal is not None) and (waktu_selesai is not None)):
+            try:
+                cursor.execute("INSERT INTO HISTORI_TANAMAN (email,waktu_awal,id_bibit_tanaman) VALUES (%s,%s, (SELECT BIBIT_TANAMAN_MENGHASILKAN_HASIL_PANEN.ID_BIBIT_TANAMAN FROM BIBIT_TANAMAN_MENGHASILKAN_HASIL_PANEN, PRODUK WHERE PRODUK.ID = BIBIT_TANAMAN_MENGHASILKAN_HASIL_PANEN.ID_HASIL_PANEN AND PRODUK.NAMA = %s))", [userEmail,waktu_awal,bibit])
+                cursor.execute("INSERT INTO HISTORI_PRODUKSI (email,waktu_awal,waktu_selesai,jumlah,xp) VALUES (%s,%s,%s,%d,%d)", [userEmail,waktu_awal,waktu_selesai,jumlah,xp])
+                cursor.execute("SET SEARCH_PATH TO public")
+                return redirect("/readhistoritanamanpengguna")
+            except Exception as error:
+                print(error)
+        else:
+            message = "Masih ada yang kosong"
+            return render(request, 'historitanaman/createHistoriTanamanPengguna.html', {'message':message})
+    else:
+        return render(request, 'historitanaman/createHistoriTanamanPengguna.html', {'form':form})
 
 def readhistoritanamanadmin(request):
     cursor = connection.cursor()
