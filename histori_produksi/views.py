@@ -1,5 +1,7 @@
 import email
-from django.shortcuts import render
+from math import prod
+from unittest import result
+from django.shortcuts import redirect, render
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
 from django.db import connection
 from collections import namedtuple
@@ -41,14 +43,27 @@ def produksiProdukMakanan(request):
     cursor = connection.cursor()
     cursor.execute("SET search_path TO public")
     email = request.session ['email']
-    cursor.execute("SET search_path TO public")
+    cursor.execute("SET search_path TO hidayb06")
+    cursor.execute("SELECT * FROM PRODUK P WHERE P.ID IN (SELECT * FROM PRODUK_MAKANAN)")
+    produk = cursor.fetchall()
+    response = {}
+    response['produk_makanan'] = []
+    for i in range(len(produk)):
+            response['produk_makanan'].append([
+                produk[i][0], produk[i][1]
+            ])
     now = datetime.now()
     dt_string = now.strftime("%Y/%m/%d %H%M%S")
     if (request.method == 'POST'):
         if (request.POST['jumlah'] == ""):
-            message = "Data yang diisikan belum lengkap, silahkan lengkapi data terlebih dahulu"
-            return render (request, 'histori_produksi/produksiProdukMakanan.html', {'message':message})
+            response['message'] = "Data yang diisikan belum lengkap, silahkan lengkapi data terlebih dahulu"
+            return render (request, 'histori_produksi/produksiProdukMakanan.html', response)
         else:        
-            cursor.execute("INSERT INTO HISTORI_PRODUKSI_MAKANAN VALUES")
+            cursor.execute("INSERT INTO HISTORI_PRODUKSI VALUES (%s, %s, %s, %s, %s)", [email, dt_string, dt_string, request.POST['jumlah'],request.POST['xp']])
+            cursor.execute("SELECT P.ID_ALAT_PRODUKSI FROM PRODUKSI P WHERE P.ID_PRODUK_MAKANAN = %s", [request.POST['id_produk_makanan']])
+            result = cursor.fetchone()
+            id_alat_produksi = result[0]
+            cursor.execute("INSERT INTO HISTORI_PRODUKSI_MAKANAN VALUES (%s, %s, %s, %s)", [email, dt_string, id_alat_produksi, request.POST['id_produk_makanan']])
+            return redirect ('/histori_produksi/historiprodukmakanan')
     else:
-        return render(request, 'histori_produksi/produksiProdukMakanan.html')
+        return render(request, 'histori_produksi/produksiProdukMakanan.html', response)

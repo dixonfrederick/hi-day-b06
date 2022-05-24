@@ -12,9 +12,9 @@
 <h1>Form Produksi Produk Makanan</h1>
 <p>ID Produk Makanan</p>
 <select name="id_produk_makanan">
-    <option value="hasil_panen">p001</option>
-    <option value="produk_hewan">p002</option>
-    <option value="produk_makanan">p003</option>
+    {% for id, nama in produk_makanan %}
+    <option value={{id}}>{{nama}}</option>
+    {% endfor %}
   </select>
 <p>Jumlah</p>
 <input id="jumlah_makanan" type="number" name="jumlah" onchange="adderxp()">
