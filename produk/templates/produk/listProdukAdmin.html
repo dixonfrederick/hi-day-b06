@@ -35,9 +35,11 @@
               <td>{{ res.harga_jual }}</td>
               <td>{{ res.sifat_produk }}</td>
               <td><div class="d-grid gap-2">
-              <button type="button">Update</button>
-              <button type="button">Delete</button>
+              <a href="updateproduk/{{ res.id }}"><button type="button">Update</button></a>
+              {% if res.id in delete %}
+              <a href="deleteproduk/{{ res.id }}"><button type="button">Delete</button></a>
               </div></td>
+              {% endif %}
             </tr>
             {% endfor %} 
           <tr>

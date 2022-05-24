@@ -7,23 +7,23 @@
 {% endblock head %}
 
 {% block content %}
-<form action="/produk/buatproduk" method="POST">
+
+<form method="POST">
   {% csrf_token %}
 <h1>Form Buat Produk</h1>
 <p>Jenis Produk</p>
-<select id="jenis_produk" name="jenis_produk">
-    <option value="hasil_panen">Hasil Panen</option>
-    <option value="produk_hewan">Produk Hewan</option>
-    <option value="produk_makanan">Produk Makanan</option>
-  </select>
-<p id="nama">Nama</p>
-<input type="text" name="nama">
+<p style="font-weight:bold ;">{{jenis}}</p>
+<p>Nama</p>
+<p style="font-weight:bold ;">{{nama}}</p>
+
 <p>Harga Jual</p>
-<input type="number" name="harga_jual">
+<input id="harga_jual" type="number" name="harga_jual">
 <p>Sifat Produk</p>
-<input type="text" name="sifat_produk">
+<input id="sifat_produk" type="text" name="sifat_produk">
 <br>
 <p style="color: red;">{{ message }}</p>
 <input type = "submit" value = "submit"/>
+
 </form>
+
 {% endblock content %}

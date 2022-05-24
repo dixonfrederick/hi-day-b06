@@ -35,10 +35,12 @@
               <td>{{ res.durasi }}</td>
               <td>{{ res.jumlah_unit_hasil }}</td>
               <td><div class="d-grid gap-2">
-                <a href="detailproduksi/{{ res.nama }}"><button type="button">Details</button></a>
-              <button type="button">Update</button>
-              <button type="button">Delete</button>
-              </div></td>
+              <a href="detailproduksi/{{ res.id_alat_produksi }}/{{ res.id_produk_makanan }}"><button type="button">Details</button></a>
+              <a href="updateproduksi/{{ res.id_alat_produksi }}/{{ res.id_produk_makanan }}"><button type="button">Update</button></a>
+              {% if res in deletable %}
+              <a href="deleteproduksi/{{ res.id_alat_produksi }}/{{ res.id_produk_makanan }}"><button type="button">Delete</button></a>
+              {% endif %}
+            </div></td>
             </tr>
             {% endfor %} 
           <tr>

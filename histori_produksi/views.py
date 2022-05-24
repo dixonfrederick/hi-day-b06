@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
 from django.db import connection
 from collections import namedtuple
+from datetime import datetime
 
 # Create your views here.
 def namedtuplefetchall(cursor):
@@ -37,4 +38,17 @@ def historiProdukMakanan(request):
         return render (request, 'histori_produksi/historiProdukMakananAdmin.html', {'result': result})    
 
 def produksiProdukMakanan(request):
-    return render (request, 'histori_produksi/produksiProdukMakanan.html')
+    cursor = connection.cursor()
+    cursor.execute("SET search_path TO public")
+    email = request.session ['email']
+    cursor.execute("SET search_path TO public")
+    now = datetime.now()
+    dt_string = now.strftime("%Y/%m/%d %H%M%S")
+    if (request.method == 'POST'):
+        if (request.POST['jumlah'] == ""):
+            message = "Data yang diisikan belum lengkap, silahkan lengkapi data terlebih dahulu"
+            return render (request, 'histori_produksi/produksiProdukMakanan.html', {'message':message})
+        else:        
+            cursor.execute("INSERT INTO HISTORI_PRODUKSI_MAKANAN VALUES")
+    else:
+        return render(request, 'histori_produksi/produksiProdukMakanan.html')

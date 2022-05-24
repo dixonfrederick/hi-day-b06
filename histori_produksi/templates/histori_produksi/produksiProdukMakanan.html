@@ -7,15 +7,28 @@
 {% endblock head %}
 
 {% block content %}
+<form action="/histori_produksi/produksiprodukmakanan" method="POST">
+  {% csrf_token %}
 <h1>Form Produksi Produk Makanan</h1>
 <p>ID Produk Makanan</p>
-<select name="jenis_produk">
+<select name="id_produk_makanan">
     <option value="hasil_panen">p001</option>
     <option value="produk_hewan">p002</option>
     <option value="produk_makanan">p003</option>
   </select>
 <p>Jumlah</p>
-<input type="number" name="jumlah">
-<p>XP : 5</p>
+<input id="jumlah_makanan" type="number" name="jumlah" onchange="adderxp()">
+<p>XP</p>
+<input id="xp" type="number" name="xp" readonly="readonly" value = "0">
+<br>
+<p style="color: red;">{{ message }}</p>
 <input type = "submit" value = "submit"/>
+</form>
+<script>
+  function adderxp() {
+    const jumlah_makanan = document.getElementById("jumlah_makanan").value
+    document.getElementById("xp").value = jumlah_makanan*5
+  }
+</script>
 {% endblock content %}
+
