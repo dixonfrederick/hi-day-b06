@@ -1,3 +1,4 @@
+{% extends "home/basePengguna.html" %}
 {% load static %}
 
 {% block head %}
@@ -6,12 +7,16 @@
 {% endblock head %}
 
 {% block content %}
-<h1>Form Ubah Produksi</h1>
+<form method="POST">
+  {% csrf_token %}
+<h1>Update Produksi</h1>
 {% for res in result %}
   <p>Produk Makanan : {{ res.produk_makanan }}</p>
   <p>Alat Produksi  : {{ res.alat_produksi }}</p>
-  <p>Durasi Produksi : {{ res.durasi }}</p>
-  <p>Jumlah Produk Hasil Produksi : {{ res.jumlah_unit_hasil }}</p>
+  <p>Durasi Produksi (dalam menit) : </p>
+  <input id="durasi" type="number" name="durasi" min="0">
+  <p>Jumlah Produk yang Dihasilkan : </p>
+  <input id="jumlah" type="number" name="jumlah" min="0">
 {% endfor %}
 
 <div class="container-md">
@@ -43,4 +48,7 @@
     </div>
   </div>
 </div>
+<p style="color: red;">{{ message }}</p>
+<input type = "submit" value = "submit"/>
+</form>
 {% endblock content %}

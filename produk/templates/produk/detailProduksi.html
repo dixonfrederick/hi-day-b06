@@ -1,3 +1,4 @@
+{% extends "home/basePengguna.html" %}
 {% load static %}
 
 {% block head %}
@@ -10,8 +11,8 @@
 {% for res in result %}
   <p>Produk Makanan : {{ res.produk_makanan }}</p>
   <p>Alat Produksi  : {{ res.alat_produksi }}</p>
-  <p>Durasi Produksi : {{ res.durasi }}</p>
-  <p>Jumlah Produk Hasil Produksi : {{ res.jumlah_unit_hasil }}</p>
+  <p>Durasi Produksi (dalam menit) : {{ res.durasi }}</p>
+  <p>Jumlah Produk yang Dihasilkan : {{ res.jumlah_unit_hasil }}</p>
 {% endfor %}
 
 <div class="container-md">

@@ -40,7 +40,6 @@ def listProduk(request):
             END AS JENIS
             FROM PRODUK P;""")
             result = namedtuplefetchall(cursor)
-            print(result)
         except Exception as e:
             print(e)
         return render (request, 'produk/listProdukPengguna.html', {'result': result})
@@ -62,7 +61,6 @@ def buatProduk(request):
     cursor = connection.cursor()            
     cursor.execute("SET SEARCH_PATH TO hidayb06")
     if (request.method == 'POST'):
-        print(request.POST)
         if (request.POST['nama'] == "" or request.POST['harga_jual'] == "" or request.POST['sifat_produk'] == ""):
             message = "Data yang diisikan belum lengkap, silahkan lengkapi data terlebih dahulu"
             return render (request, 'produk/buatProduk.html', {'message':message})
@@ -73,7 +71,6 @@ def buatProduk(request):
                 if (len(result) == 0):
                     id = 'HP1'
                 else :
-                    print(result)
                     last_id = (((result[-1])[0])[2:])
                     last_number = int(last_id) + 1
                     id = 'HP' + str(last_number)
@@ -117,7 +114,6 @@ def updateProduk(request, id):
         WHERE P.ID = %s;""", [id])
     result = cursor.fetchall()
     jenis = (result[0])[4]
-    print (jenis)
     nama = (result[0])[1]
     if (request.method == 'POST'):
         if (request.POST['harga_jual'] == "" or request.POST['sifat_produk'] == ""):
@@ -171,7 +167,6 @@ def detailProduksi(request, id_alat_produksi, id_produk_makanan):
         FROM PRODUKSI P, PRODUK PR, ASET A
         WHERE P.ID_ALAT_PRODUKSI = A.ID AND P.ID_PRODUK_MAKANAN = PR.ID AND P.ID_ALAT_PRODUKSI = %s AND P.ID_PRODUK_MAKANAN = %s;""", [id_alat_produksi, id_produk_makanan])
         result = namedtuplefetchall(cursor)
-        print(result)
         cursor.execute("""SELECT P.NAMA AS BAHAN, PD.JUMLAH 
         FROM PRODUK P, PRODUK_DIBUTUHKAN_OLEH_PRODUK_MAKANAN PD
         WHERE P.ID = PD.ID_PRODUK AND PD.ID_PRODUK_MAKANAN = %s""", [id_produk_makanan])
@@ -183,32 +178,56 @@ def detailProduksi(request, id_alat_produksi, id_produk_makanan):
     return render(request, 'produk/detailProduksi.html', {'result': result, 'bahan':bahan})
 
 def buatProduksi(request):
+    response = {}
+    response['produk_makanan'] = []
+    response['alat_produksi'] = []
+    cursor = connection.cursor()
+    # cursor.execute("SET search_path TO public")
+    # email = request.session ['email']
+    cursor.execute("SET search_path TO hidayb06")
+    cursor.execute("SELECT * FROM PRODUK P WHERE P.ID IN (SELECT * FROM PRODUK_MAKANAN)")
+    produk = cursor.fetchall()
+    for i in range(len(produk)):
+        response['produk_makanan'].append([
+            produk[i][0], produk[i][1]
+        ])
+
+    cursor.execute("SELECT * FROM ASET A WHERE A.ID IN (SELECT ID_ASET FROM ALAT_PRODUKSI)")
+    alat = cursor.fetchall()
+    for i in range(len(alat)):
+        response['alat_produksi'].append([
+            alat[i][0], alat[i][1]
+        ])
     return render (request, 'produk/buatProduksi.html')
 
 def updateProduksi(request, id_alat_produksi, id_produk_makanan):
     cursor = connection.cursor()
-    cursor.execute("SET SEARCH_PATH TO hidayb06")
-    cursor.execute("""SELECT *,
-        CASE 
-        WHEN P.ID IN(SELECT PH.id_produk FROM PRODUK_HEWAN PH) THEN 'Produk Hewan'
-        WHEN P.ID IN(SELECT HP.id_produk FROM HASIL_PANEN HP) THEN 'Hasil Panen'
-        WHEN P.ID IN(SELECT PM.id_produk FROM PRODUK_MAKANAN PM) THEN 'Produk Makanan'
-        END AS JENIS
-        FROM PRODUK P 
-        WHERE P.ID = %s;""", [id])
-    result = cursor.fetchall()
-    jenis = (result[0])[4]
-    print (jenis)
-    nama = (result[0])[1]
+    result = []
+    try:
+        cursor.execute("SET SEARCH_PATH TO hidayb06")
+        cursor.execute("""SELECT PR.NAMA AS PRODUK_MAKANAN, A.NAMA AS ALAT_PRODUKSI, EXTRACT (MINUTE FROM P.DURASI) AS DURASI, P.JUMLAH_UNIT_HASIL
+        FROM PRODUKSI P, PRODUK PR, ASET A
+        WHERE P.ID_ALAT_PRODUKSI = A.ID AND P.ID_PRODUK_MAKANAN = PR.ID AND P.ID_ALAT_PRODUKSI = %s AND P.ID_PRODUK_MAKANAN = %s;""", [id_alat_produksi, id_produk_makanan])
+        result = namedtuplefetchall(cursor)
+        cursor.execute("""SELECT P.NAMA AS BAHAN, PD.JUMLAH 
+        FROM PRODUK P, PRODUK_DIBUTUHKAN_OLEH_PRODUK_MAKANAN PD
+        WHERE P.ID = PD.ID_PRODUK AND PD.ID_PRODUK_MAKANAN = %s""", [id_produk_makanan])
+        bahan = namedtuplefetchall(cursor)
+    except Exception as e:
+        print(e)
     if (request.method == 'POST'):
-        if (request.POST['harga_jual'] == "" or request.POST['sifat_produk'] == ""):
+        if (request.POST['durasi'] == "" or request.POST['jumlah'] == ""):
             message = "Data yang diisikan belum lengkap, silahkan lengkapi data terlebih dahulu"
-            return render (request, 'produk/updateProduk.html', {'message':message})
+            return render (request, 'produk/updateProduksi.html', {'result': result, 'bahan':bahan, 'message':message})
         else:
-            cursor.execute("UPDATE PRODUK SET HARGA_JUAL = %s, SIFAT_PRODUK = %s WHERE PRODUK.ID = %s", [request.POST['harga_jual'], request.POST['sifat_produk'], id])
-            return redirect ('/produk/listproduk')
+            minute = request.POST['durasi']
+            if (len(minute) == 1):
+                minute = "0"+minute
+            durasi = "00:" + minute + ":00"
+            cursor.execute("UPDATE PRODUKSI P SET DURASI = %s, JUMLAH_UNIT_HASIL = %s WHERE P.ID_PRODUK_MAKANAN = %s AND P.ID_ALAT_PRODUKSI = %s", [durasi, request.POST['jumlah'], id_produk_makanan, id_alat_produksi])
+            return redirect ('/produk/listproduksi')
     else:
-        return render (request, 'produk/updateProduk.html', {'jenis':jenis, 'nama':nama})
+        return render(request, 'produk/updateProduksi.html', {'result': result, 'bahan':bahan})
  
 
 def deleteProduksi(request, id_alat_produksi, id_produk_makanan):

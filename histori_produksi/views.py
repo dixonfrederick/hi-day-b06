@@ -49,9 +49,9 @@ def produksiProdukMakanan(request):
     response = {}
     response['produk_makanan'] = []
     for i in range(len(produk)):
-            response['produk_makanan'].append([
-                produk[i][0], produk[i][1]
-            ])
+        response['produk_makanan'].append([
+            produk[i][0], produk[i][1]
+        ])
     now = datetime.now()
     dt_string = now.strftime("%Y/%m/%d %H%M%S")
     if (request.method == 'POST'):
