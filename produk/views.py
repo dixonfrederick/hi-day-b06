@@ -160,6 +160,8 @@ def listProduksi(request):
 
 def detailProduksi(request, id_alat_produksi, id_produk_makanan):
     cursor = connection.cursor()
+    cursor.execute("SET SEARCH_PATH TO PUBLIC")
+    role = request.session ['role']
     result = []
     try:
         cursor.execute("SET SEARCH_PATH TO hidayb06")
@@ -175,7 +177,10 @@ def detailProduksi(request, id_alat_produksi, id_produk_makanan):
         print(e)
     finally:
         cursor.close()
-    return render(request, 'produk/detailProduksi.html', {'result': result, 'bahan':bahan})
+    if (role=='pengguna'):
+        return render(request, 'produk/detailProduksiPengguna.html', {'result': result, 'bahan':bahan})
+    else:
+        return render(request, 'produk/detailProduksiAdmin.html', {'result': result, 'bahan':bahan})
 
 def buatProduksi(request):
     response = {}
@@ -191,14 +196,13 @@ def buatProduksi(request):
         response['produk_makanan'].append([
             produk[i][0], produk[i][1]
         ])
-
     cursor.execute("SELECT * FROM ASET A WHERE A.ID IN (SELECT ID_ASET FROM ALAT_PRODUKSI)")
     alat = cursor.fetchall()
     for i in range(len(alat)):
         response['alat_produksi'].append([
             alat[i][0], alat[i][1]
         ])
-    return render (request, 'produk/buatProduksi.html')
+    return render (request, 'produk/buatProduksi.html', response)
 
 def updateProduksi(request, id_alat_produksi, id_produk_makanan):
     cursor = connection.cursor()

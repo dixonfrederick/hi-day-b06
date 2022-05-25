@@ -7,25 +7,13 @@
 {% endblock head %}
 
 {% block content %}
-<form method="POST">
-  {% csrf_token %}
-<h1>Form Buat Produksi</h1>
-  <p>Produk Makanan : </p>
-  <select name="id_produk_makanan">
-    {% for id, nama in produk_makanan %}
-    <option value={{id}}>{{nama}}</option>
-    {% endfor %}
-  </select>
-  <p>Alat Produksi : </p>
-  <select name="alat_produksi" id="alat_produksi">
-    {% for id, nama in alat_produksi %}
-    <option value={{id}}>{{nama}}</option>
-    {% endfor %}
-  </select>
-  <p>Durasi Produksi (dalam menit) : </p>
-  <input id="durasi" type="number" name="durasi" min="0">
-  <p>Jumlah Produk yang Dihasilkan : </p>
-  <input id="jumlah" type="number" name="jumlah" min="0">
+<h1>Detail Produksi</h1>
+{% for res in result %}
+  <p>Produk Makanan : {{ res.produk_makanan }}</p>
+  <p>Alat Produksi  : {{ res.alat_produksi }}</p>
+  <p>Durasi Produksi (dalam menit) : {{ res.durasi }}</p>
+  <p>Jumlah Produk yang Dihasilkan : {{ res.jumlah_unit_hasil }}</p>
+{% endfor %}
 
 <div class="container-md">
   <div class="d-grid gap-3">
@@ -56,7 +44,4 @@
     </div>
   </div>
 </div>
-<p style="color: red;">{{ message }}</p>
-<input type = "submit" value = "submit"/>
-</form>
 {% endblock content %}
