@@ -33,4 +33,4 @@ def listaset(request):
         return render (request, 'aset/listAsetAdmin.html', {'result': result})
 
 def buataset(request):
-    return render (request, 'aset/buataset.html')
+    return render (request, 'aset/buatAset.html')
