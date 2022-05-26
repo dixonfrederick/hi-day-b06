@@ -38,8 +38,8 @@ def createtransaksipembeliankoinpengguna(request, id):
             message = "Data yang diisikan belum lengkap, silahkan lengkapi data terlebih dahulu"
             return render (request, 'paketkoin/createTransaksiPembelianKoinPengguna.html', {'message':message})
         else:
-            total_biaya = request.POST['jumlah'] * harga
-            cursor.execute("INSERT INTO TRANSAKSI_PEMBELIAN_KOIN (email,waktu,jumlah,cara_pembayaran,paket_koin,total_biaya) VALUES (%s,%s,%s,%s,%s,%s)", [userEmail,now,request.POST['jumlah'],request.POST['cara_pembayaran'],id,total_biaya])
+            total_biaya = int(request.POST['jumlah']) * int(harga)
+            cursor.execute("INSERT INTO TRANSAKSI_PEMBELIAN_KOIN (email,waktu,jumlah,cara_pembayaran,paket_koin,total_biaya) VALUES (%s,%s,%s,%s,%s,%s)", [userEmail,now,request.POST['jumlah'],request.POST['cara_pembayaran'],id,str(total_biaya)])
         return redirect("/transaksipembeliankoin/readtransaksipembeliankoinpengguna")
     return render(request, 'paketkoin/createTransaksiPembelianKoinPengguna.html', {'jumlah_koin':jumlah_koin, 'harga':harga})
 
