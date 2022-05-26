@@ -1,5 +1,6 @@
 import email
 from math import prod
+from operator import truediv
 from unittest import result
 from django.shortcuts import redirect, render
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
@@ -52,18 +53,55 @@ def produksiProdukMakanan(request):
         response['produk_makanan'].append([
             produk[i][0], produk[i][1]
         ])
-    now = datetime.now()
-    dt_string = now.strftime("%Y/%m/%d %H%M%S")
     if (request.method == 'POST'):
         if (request.POST['jumlah'] == ""):
             response['message'] = "Data yang diisikan belum lengkap, silahkan lengkapi data terlebih dahulu"
             return render (request, 'histori_produksi/produksiProdukMakanan.html', response)
-        else:        
-            cursor.execute("INSERT INTO HISTORI_PRODUKSI VALUES (%s, %s, %s, %s, %s)", [email, dt_string, dt_string, request.POST['jumlah'],request.POST['xp']])
-            cursor.execute("SELECT P.ID_ALAT_PRODUKSI FROM PRODUKSI P WHERE P.ID_PRODUK_MAKANAN = %s", [request.POST['id_produk_makanan']])
-            result = cursor.fetchone()
-            id_alat_produksi = result[0]
-            cursor.execute("INSERT INTO HISTORI_PRODUKSI_MAKANAN VALUES (%s, %s, %s, %s)", [email, dt_string, id_alat_produksi, request.POST['id_produk_makanan']])
-            return redirect ('/histori_produksi/historiprodukmakanan')
+        else:
+            id_produk_makanan = request.POST['id_produk_makanan']
+            jumlah_produksi = int(request.POST['jumlah'])
+            xp = int(request.POST['xp'])
+            now = datetime.now()
+            dt_string = now.strftime("%Y/%m/%d %H%M%S")
+
+            cursor.execute(""" SELECT P.ID_PRODUK, P.JUMLAH 
+            FROM PRODUK_DIBUTUHKAN_OLEH_PRODUK_MAKANAN P
+            WHERE P.ID_PRODUK_MAKANAN = %s
+            ORDER BY P.ID_PRODUK; """,[request.POST['id_produk_makanan']])
+            bahan = cursor.fetchall()
+            jumlah_dibutuhkan = list(i[1] for i in bahan)
+            jumlah_produksi = request.POST['jumlah']
+            total_bahan = []
+            for i in jumlah_dibutuhkan:
+                total_bahan.append(int(i)*jumlah_produksi)
+            
+            cursor.execute(""" SELECT L.ID_PRODUK, L.JUMLAH 
+            FROM LUMBUNG_MEMILIKI_PRODUK L
+            WHERE L.ID_PRODUK IN (SELECT P.ID_PRODUK 
+            FROM PRODUK_DIBUTUHKAN_OLEH_PRODUK_MAKANAN P
+            WHERE P.ID_PRODUK_MAKANAN = %s) AND L.ID_LUMBUNG = %s
+            ORDER BY L.ID_PRODUK""",[request.POST['id_produk_makanan'], email])
+            jumlah = cursor.fetchall()
+            jumlah_dimiliki = list(i[1] for i in jumlah)
+            
+            valid = True
+            if (len(jumlah_dimiliki)<len(jumlah_dibutuhkan)):
+                valid = False
+            else:
+                for i in range (len(jumlah_dimiliki)):
+                    if (jumlah_dibutuhkan[i]>jumlah_dimiliki[i]):
+                        valid = False
+                        break
+
+            if(valid):
+                cursor.execute("INSERT INTO HISTORI_PRODUKSI VALUES (%s, %s, %s, %s, %s)", [email, dt_string, dt_string, request.POST['jumlah'],request.POST['xp']])
+                cursor.execute("SELECT P.ID_ALAT_PRODUKSI FROM PRODUKSI P WHERE P.ID_PRODUK_MAKANAN = %s", [request.POST['id_produk_makanan']])
+                result = cursor.fetchone()
+                id_alat_produksi = result[0]
+                cursor.execute("INSERT INTO HISTORI_PRODUKSI_MAKANAN VALUES (%s, %s, %s, %s)", [email, dt_string, id_alat_produksi, request.POST['id_produk_makanan']])
+                return redirect ('/histori_produksi/historiprodukmakanan')
+            else :        
+                response['message'] = "Anda tidak memiliki bibit yang cukup, silahkan membeli bibit terlebih dahulu"
+                return render(request, 'histori_produksi/produksiProdukMakanan.html', response)
     else:
         return render(request, 'histori_produksi/produksiProdukMakanan.html', response)
