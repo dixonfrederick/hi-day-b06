@@ -1,6 +1,7 @@
 from calendar import c
 from distutils.util import execute
 from email import message
+import re
 from unittest import result
 from django.shortcuts import redirect, render
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
@@ -136,8 +137,11 @@ def listProduksi(request):
     cursor.execute("SET search_path TO public")
     role = request.session ['role']
     cursor.execute("SET SEARCH_PATH TO hidayb06")
-    cursor.execute("""SELECT * FROM PRODUKSI P
-    WHERE (P.ID_ALAT_PRODUKSI, P.ID_PRODUK_MAKANAN) NOT IN (SELECT ID_ALAT_PRODUKSI, ID_PRODUK_MAKANAN FROM HISTORI_PRODUKSI_MAKANAN)""")
+    cursor.execute("""SELECT P.ID_ALAT_PRODUKSI, P.ID_PRODUK_MAKANAN, PR.NAMA AS PRODUK_MAKANAN, A.NAMA AS ALAT_PRODUKSI, EXTRACT (MINUTE FROM P.DURASI) AS DURASI, P.JUMLAH_UNIT_HASIL
+    FROM PRODUKSI P, PRODUK PR, ASET A
+    WHERE P.ID_ALAT_PRODUKSI = A.ID AND P.ID_PRODUK_MAKANAN = PR.ID AND (P.ID_ALAT_PRODUKSI, P.ID_PRODUK_MAKANAN) NOT IN (SELECT ID_ALAT_PRODUKSI, ID_PRODUK_MAKANAN FROM HISTORI_PRODUKSI_MAKANAN)""")
+    # cursor.execute("""SELECT ID_PRODUK_MAKANAN FROM PRODUKSI P
+    # WHERE (P.ID_ALAT_PRODUKSI, P.ID_PRODUK_MAKANAN) NOT IN (SELECT ID_ALAT_PRODUKSI, ID_PRODUK_MAKANAN FROM HISTORI_PRODUKSI_MAKANAN)""")
     deletable = namedtuplefetchall(cursor)
     if (role == "pengguna"):
         try:
@@ -186,9 +190,8 @@ def buatProduksi(request):
     response = {}
     response['produk_makanan'] = []
     response['alat_produksi'] = []
+    response['produk'] = []
     cursor = connection.cursor()
-    # cursor.execute("SET search_path TO public")
-    # email = request.session ['email']
     cursor.execute("SET search_path TO hidayb06")
     cursor.execute("SELECT * FROM PRODUK P WHERE P.ID IN (SELECT * FROM PRODUK_MAKANAN)")
     produk = cursor.fetchall()
@@ -202,6 +205,30 @@ def buatProduksi(request):
         response['alat_produksi'].append([
             alat[i][0], alat[i][1]
         ])
+
+    cursor.execute("SELECT * FROM PRODUK")
+    produk = cursor.fetchall()
+    for i in range(len(produk)):
+        response['produk'].append([
+            produk[i][0], produk[i][1]
+        ])
+    if (request.method == 'POST'):
+        if (request.POST['durasi'] == "" or request.POST['jumlah_produk'] == ""):
+            response['message'] = "Data yang diisikan belum lengkap, silahkan lengkapi data terlebih dahulu"
+            return render (request, 'produk/buatProduksi.html', response)
+        else:
+            minute = request.POST['durasi']
+            if (len(minute) == 1):
+                minute = "0"+minute
+            durasi = "00:" + minute + ":00"
+            cursor.execute("INSERT INTO PRODUKSI VALUES (%s, %s, %s, %s)", [request.POST['alat_produksi'], request.POST['id_produk_makanan'], durasi, request.POST['jumlah']])
+            bahan = request.POST.getlist('bahan')
+            jumlah_produk = request.POST.getlist('jumlah_produk')
+            print(bahan)
+            print(jumlah_produk)
+            for i in range (len(bahan)):
+                cursor.execute("INSERT INTO PRODUK_DIBUTUHKAN_OLEH_PRODUK_MAKANAN VALUES (%s, %s, %s)", [request.POST['id_produk_makanan'], bahan[i], jumlah_produk[i]])     
+            return redirect ('/produk/listproduksi')
     return render (request, 'produk/buatProduksi.html', response)
 
 def updateProduksi(request, id_alat_produksi, id_produk_makanan):
@@ -238,4 +265,5 @@ def deleteProduksi(request, id_alat_produksi, id_produk_makanan):
     cursor = connection.cursor()
     cursor.execute("SET SEARCH_PATH TO hidayb06")
     cursor.execute("DELETE FROM PRODUKSI P WHERE P.ID_ALAT_PRODUKSI = %s AND P.ID_PRODUK_MAKANAN = %s", [id_alat_produksi, id_produk_makanan])
+    cursor.execute("DELETE FROM PRODUK_DIBUTUHKAN_OLEH_PRODUK_MAKANAN P WHERE P.ID_PRODUK_MAKANAN = %s", [id_produk_makanan])
     return redirect ('/produk/listproduksi')
