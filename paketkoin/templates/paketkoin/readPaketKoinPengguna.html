@@ -30,7 +30,7 @@
                         <td>{{ forloop.counter }}</td>
                         <td>{{ res.jumlah_koin }}</td>
                         <td>{{ res.harga }}</td>
-                        <td><a href="{% url 'transaksipembeliankoin:createtransaksipembeliankoinpengguna' %}">Beli</a></td>
+                        <td><a href="createtransaksipembeliankoinpengguna/{{ res.jumlah_koin }}">Beli</a></td>
                     </tr>
                     {% endfor %}
                   <tr>
