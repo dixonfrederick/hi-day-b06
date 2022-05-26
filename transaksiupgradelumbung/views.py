@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.db import connection
 from django.db.utils import IntegrityError, InterfaceError
 from .forms import *
+from django.utils import timezone
 
 # Create your views here.
 def namedtuplefetchall(cursor):
@@ -14,28 +15,30 @@ def namedtuplefetchall(cursor):
     return [nt_result(*row) for row in cursor.fetchall()]
 
 def createtransaksiupgradelumbungpengguna(request):
-    form = CreateTransaksiUpgradeLumbungPenggunaForm(request.POST or None)
+    # form = CreateTransaksiUpgradeLumbungPenggunaForm(request.POST or None)
     cursor = connection.cursor()
-    cursor.execute("SET SEARCH_PATH TO hidayb06")
+    cursor.execute("SET search_path TO public")
     userEmail = request.session['email']
-    if (form.is_valid() and request.method == 'POST'):
-        waktu = form.cleaned_data['waktu_upgrade']
-        level = form.cleaned_data['level_lumbung']
-        kapasitas = form.cleaned_data['kapasitas_lumbung']
-        biaya = form.cleaned_data['biaya_upgrade']
-        if ((waktu is not None) and (level is not None) and (kapasitas is not None) and (biaya is not None)):
-            try:
-                cursor.execute("INSERT INTO TRANSAKSI_UPGRADE_LUMBUNG (email,waktu) VALUES (%s,%s)", [userEmail,waktu])
-                cursor.execute("UPDATE LUMBUNG SET (LEVEL = LEVEL + 1) AND (KAPASITAS_MAKSIMAL = KAPASITAS_MAKSIMAL + 50) WHERE EMAIL = %s AND LEVEL = %d AND KAPASITAS_MAKSIMAL = %d", [userEmail,level,kapasitas])
-                cursor.execute("SET SEARCH_PATH TO public")
-                return redirect("/readtransaksiupgradelumbungpengguna")
-            except Exception as error:
-                print(error)
-        else:
-            message = "Masih ada yang kosong"
-            return render(request, 'transaksiupgradelumbung/createTransaksiUpgradeLumbungPengguna.html', {'message':message})
+    cursor.execute("SET SEARCH_PATH TO hidayb06")
+    cursor.execute("SELECT * FROM LUMBUNG WHERE LUMBUNG.EMAIL = %s", [userEmail])
+    result = cursor.fetchall()
+    level = (result[0])[1]
+    kapasitas = (result[0])[2]
+    now = timezone.now()
+    if (request.method == 'POST'):
+        # waktu = form.cleaned_data['waktu_upgrade']
+        # level = form.cleaned_data['level_lumbung']
+        # kapasitas = form.cleaned_data['kapasitas_lumbung']
+        # biaya = form.cleaned_data['biaya_upgrade']
+        try:
+            cursor.execute("INSERT INTO TRANSAKSI_UPGRADE_LUMBUNG (email,waktu) VALUES (%s,%s)", [userEmail,now])
+            cursor.execute("UPDATE LUMBUNG SET LEVEL = LEVEL + 1, KAPASITAS_MAKSIMAL = KAPASITAS_MAKSIMAL + 50 WHERE EMAIL = %s", [userEmail])
+            cursor.execute("SET SEARCH_PATH TO public")
+            return redirect("/transaksiupgradelumbung/readtransaksiupgradelumbungpengguna")
+        except Exception as error:
+            print(error)
     else:
-        return render(request, 'transaksiupgradelumbung/createTransaksiUpgradeLumbungPengguna.html', {'form':form})
+        return render(request, 'transaksiupgradelumbung/createTransaksiUpgradeLumbungPengguna.html', {'level':level, 'kapasitas':kapasitas})
 
 def readtransaksiupgradelumbungadmin(request):
     cursor = connection.cursor()
