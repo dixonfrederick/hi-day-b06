@@ -17,7 +17,6 @@ def createtransaksiupgradelumbungpengguna(request):
     form = CreateTransaksiUpgradeLumbungPenggunaForm(request.POST or None)
     cursor = connection.cursor()
     cursor.execute("SET SEARCH_PATH TO hidayb06")
-    role = request.session['role']
     userEmail = request.session['email']
     if (form.is_valid() and request.method == 'POST'):
         waktu = form.cleaned_data['waktu_upgrade']

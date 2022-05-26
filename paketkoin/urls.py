@@ -8,8 +8,8 @@ app_name = 'paketkoin'
 urlpatterns = [
     path('home', home, name='home'),
     path('createpaketkoinadmin', createpaketkoinadmin, name='createpaketkoinadmin'),
-    path('deletepaketkoinadmin', deletepaketkoinadmin, name='deletepaketkoinadmin'),
+    path('deletepaketkoinadmin/<id>', deletepaketkoinadmin, name='deletepaketkoinadmin'),
     path('readpaketkoinadmin', readpaketkoinadmin, name='readpaketkoinadmin'),
     path('readpaketkoinpengguna', readpaketkoinpengguna, name='readpaketkoinpengguna'),
-    path('updatepaketkoinadmin', updatepaketkoinadmin, name='updatepaketkoinadmin'),
+    path('updatepaketkoinadmin/<id>', updatepaketkoinadmin, name='updatepaketkoinadmin'),
 ]

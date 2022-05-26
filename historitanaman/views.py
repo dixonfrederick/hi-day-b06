@@ -17,7 +17,6 @@ def createhistoritanamanpengguna(request):
     form = CreateHistoriTanamanPenggunaForm(request.POST or None)
     cursor = connection.cursor()
     cursor.execute("SET SEARCH_PATH TO hidayb06")
-    role = request.session['role']
     userEmail = request.session['email']
     if (form.is_valid() and request.method == 'POST'):
         bibit = form.cleaned_data['bibit_tanaman']

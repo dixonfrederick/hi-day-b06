@@ -30,8 +30,8 @@
                         <td>{{ forloop.counter }}</td>
                         <td>{{ res.jumlah_koin }}</td>
                         <td>{{ res.harga }}</td>
-                        <td><a href="{% url 'paketkoin:updatepaketkoinadmin' %}">Update</a></td>
-                        <td><a href="{% url 'paketkoin:deletepaketkoinadmin' %}">Delete</a></td>
+                        <td><a href="updatepaketkoinadmin/{{ res.jumlah_koin }}">Update</a></td>
+                        <td><a href="deletepaketkoinadmin/{{ res.jumlah_koin }}">Delete</a></td>
                     </tr>
                     {% endfor %}
                   <tr>
