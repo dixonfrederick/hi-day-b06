@@ -1,3 +1,4 @@
+from django.http import QueryDict
 from django.shortcuts import render
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
 from django.db import connection
@@ -170,3 +171,167 @@ def listaset_petaksawah(request):
 
 def buataset(request):
     return render (request, 'aset/buatAset.html')
+
+def buatasetdekorasi(request):
+    cursor = connection.cursor()
+    cursor.execute("SET search_path TO public")
+    cursor.execute("SET search_path TO hidayb06")
+    if (request.method == 'POST'):
+        res = request.POST
+        id = res.get('id') 
+        nama = res.get('nama')
+        minimum_level = res.get('minimum_level')
+        harga_beli = res.get('harga_beli')
+        harga_jual = res.get('harga_jual')
+        cursor.execute("""SELECT max(cast(substring(id,3) as integer)) 
+        FROM ASET 
+        WHERE id LIKE 'DK%'"""
+        )
+        result = namedtuplefetchall(cursor);
+        if (result[0].max is None):
+            id = 'DK0'
+        else :
+            resinc = result[0].max + 1
+            id = 'DK' + str(resinc)
+        cursor.execute("""INSERT INTO ASET
+        VALUES (%s, %s, %s, %s)""", [id, nama, minimum_level, harga_beli])
+        cursor.execute("""INSERT INTO DEKORASI
+        VALUES (%s, %s)""", [id, harga_jual])
+    return render (request, 'aset/buatAsetDekorasi.html')
+
+def buatasetbibittanaman(request):
+    cursor = connection.cursor()
+    cursor.execute("SET search_path TO public")
+    cursor.execute("SET search_path TO hidayb06")
+    if (request.method == 'POST'):
+        res = request.POST
+        id = res.get('id') 
+        nama = res.get('nama')
+        minimum_level = res.get('minimum_level')
+        harga_beli = res.get('harga_beli')
+        durasi_panen = res.get('durasi_panen')
+        cursor.execute("""SELECT max(cast(substring(id,3) as integer)) 
+        FROM ASET 
+        WHERE id LIKE 'BT%'"""
+        )
+        result = namedtuplefetchall(cursor);
+        if (result[0].max is None):
+            id = 'BT0'
+        else :
+            resinc = result[0].max + 1
+            id = 'BT' + str(resinc)
+        cursor.execute("""INSERT INTO ASET
+        VALUES (%s, %s, %s, %s)""", [id, nama, minimum_level, harga_beli])
+        cursor.execute("""INSERT INTO BIBIT_TANAMAN
+        VALUES (%s, %s)""", [id, durasi_panen])
+    return render (request, 'aset/buatAsetBibitTanaman.html')
+
+def buatasetkandang(request):
+    cursor = connection.cursor()
+    cursor.execute("SET search_path TO public")
+    cursor.execute("SET search_path TO hidayb06")
+    if (request.method == 'POST'):
+        res = request.POST
+        id = res.get('id') 
+        nama = res.get('nama')
+        minimum_level = res.get('minimum_level')
+        harga_beli = res.get('harga_beli')
+        kapasitas_maks = res.get('kapasitas_maks')
+        jenis_hewan = res.get('jenis_hewan')
+        cursor.execute("""SELECT max(cast(substring(id,3) as integer)) 
+        FROM ASET 
+        WHERE id LIKE 'KD%'"""
+        )
+        result = namedtuplefetchall(cursor);
+        if (result[0].max is None):
+            id = 'KD0'
+        else :
+            resinc = result[0].max + 1
+            id = 'KD' + str(resinc)
+        cursor.execute("""INSERT INTO ASET
+        VALUES (%s, %s, %s, %s)""", [id, nama, minimum_level, harga_beli])
+        cursor.execute("""INSERT INTO KANDANG
+        VALUES (%s, %s, %s)""", [id, kapasitas_maks, jenis_hewan])
+    return render (request, 'aset/buatAsetKandang.html')
+
+def buatasethewan(request):
+    cursor = connection.cursor()
+    cursor.execute("SET search_path TO public")
+    cursor.execute("SET search_path TO hidayb06")
+    if (request.method == 'POST'):
+        res = request.POST
+        id = res.get('id') 
+        nama = res.get('nama')
+        minimum_level = res.get('minimum_level')
+        harga_beli = res.get('harga_beli')
+        durasi_produksi = res.get('durasi_produksi')
+        id_kandang = res.get('id_kandang')
+        cursor.execute("""SELECT max(cast(substring(id,3) as integer)) 
+        FROM ASET 
+        WHERE id LIKE 'HW%'"""
+        )
+        result = namedtuplefetchall(cursor);
+        if (result[0].max is None):
+            id = 'HW0'
+        else :
+            resinc = result[0].max + 1
+            id = 'HW' + str(resinc)
+        cursor.execute("""INSERT INTO ASET
+        VALUES (%s, %s, %s, %s)""", [id, nama, minimum_level, harga_beli])
+        cursor.execute("""INSERT INTO HEWAN
+        VALUES (%s, %s, %s)""", [id, durasi_produksi, id_kandang])
+    return render (request, 'aset/buatAsetHewan.html')
+
+def buatasetalatproduksi(request):
+    cursor = connection.cursor()
+    cursor.execute("SET search_path TO public")
+    cursor.execute("SET search_path TO hidayb06")
+    if (request.method == 'POST'):
+        res = request.POST
+        id = res.get('id') 
+        nama = res.get('nama')
+        minimum_level = res.get('minimum_level')
+        harga_beli = res.get('harga_beli')
+        kapasitas_maks = res.get('kapasitas_maks')
+        cursor.execute("""SELECT max(cast(substring(id,3) as integer)) 
+        FROM ASET 
+        WHERE id LIKE 'AP%'"""
+        )
+        result = namedtuplefetchall(cursor);
+        if (result[0].max is None):
+            id = 'AP0'
+        else :
+            resinc = result[0].max + 1
+            id = 'AP' + str(resinc)
+        cursor.execute("""INSERT INTO ASET
+        VALUES (%s, %s, %s, %s)""", [id, nama, minimum_level, harga_beli])
+        cursor.execute("""INSERT INTO ALAT_PRODUKSI
+        VALUES (%s, %s)""", [id, kapasitas_maks])
+    return render (request, 'aset/buatAsetAlatProduksi.html')
+
+def buatasetpetaksawah(request):
+    cursor = connection.cursor()
+    cursor.execute("SET search_path TO public")
+    cursor.execute("SET search_path TO hidayb06")
+    if (request.method == 'POST'):
+        res = request.POST
+        id = res.get('id') 
+        nama = res.get('nama')
+        minimum_level = res.get('minimum_level')
+        harga_beli = res.get('harga_beli')
+        jenis_tanaman = res.get('jenis_tanaman')
+        cursor.execute("""SELECT max(cast(substring(id,3) as integer)) 
+        FROM ASET 
+        WHERE id LIKE 'PS%'"""
+        )
+        result = namedtuplefetchall(cursor);
+        if (result[0].max is None):
+            id = 'PS0'
+        else :
+            resinc = result[0].max + 1
+            id = 'PS' + str(resinc)
+        cursor.execute("""INSERT INTO ASET
+        VALUES (%s, %s, %s, %s)""", [id, nama, minimum_level, harga_beli])
+        cursor.execute("""INSERT INTO PETAK_SAWAH
+        VALUES (%s, %s)""", [id, jenis_tanaman])
+    return render (request, 'aset/buatAsetPetakSawah.html')

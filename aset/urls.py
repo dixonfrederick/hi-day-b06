@@ -13,5 +13,12 @@ urlpatterns = [
     path('listaset_kandang', listaset_kandang, name='listaset_kandang'),
     path('listaset_hewan', listaset_hewan, name='listaset_hewan'),
     path('listaset_alatproduksi', listaset_alatproduksi, name='listaset_alatproduksi'),
-    path('listaset_petaksawah', listaset_petaksawah, name='listaset_petaksawah')
+    path('listaset_petaksawah', listaset_petaksawah, name='listaset_petaksawah'),
+
+    path('buatasetdekorasi', buatasetdekorasi, name='buasetasetdekorasi'),
+    path('buatasetbibittanaman', buatasetbibittanaman, name='buatasetbibittanaman'),
+    path('buatasetkandang', buatasetkandang, name='buatasetkandang'),
+    path('buatasethewan', buatasethewan, name='buatasethewan'),
+    path('buatasetalatproduksi', buatasetalatproduksi, name='buatasetalatproduksi'),
+    path('buatasetpetaksawah', buatasetpetaksawah, name='buatasetpetaksawah')
 ]

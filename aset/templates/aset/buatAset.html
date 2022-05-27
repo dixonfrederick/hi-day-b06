@@ -7,17 +7,21 @@
 {% endblock head %}
 
 {% block content %}
-<h1>Form Aset</h1>
-<p>ID</p>
-<input type="text" name="id">
-<p>Nama</p>
-<input type="text" name="nama">
-<p>Minimum Level</p>
-<input type="text" name="minimum_level">
-<p>Harga Beli</p>
-<input type="text" name="harga_beli">
-<p>Harga Jual</p>
-<input type="text" name="harga_jual">
-<br>
-<input type = "submit" value = "Tambahkan"/>
+<div class="container-md">
+  <div class="d-grid gap-3">
+    <div class="p-2 bg-light border">
+      <div class="mx-auto" style="width: 500px;">
+        <h1>Buat Aset</h1>
+      </div>
+    </div>
+    <div class="p-2 bg-light border">
+          <a class="btn btn-primary" href="buatasetdekorasi">Dekorasi</a>
+          <a class="btn btn-primary" href="buatasetbibittanaman">Bibit Tanaman</a>
+          <a class="btn btn-primary" href="buatasetkandang">Kandang</a>
+          <a class="btn btn-primary" href="buatasethewan">Hewan</a>
+          <a class="btn btn-primary" href="buatasetalatproduksi">Alat Produksi</a>
+          <a class="btn btn-primary" href="buatasetpetaksawah">Petak Sawah</a>
+    </div>
+  </div>
+</div>
 {% endblock content %}
