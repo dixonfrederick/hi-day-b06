@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.db import connection
 from django.db.utils import IntegrityError, InterfaceError
 from .forms import *
+from django.utils import timezone
 
 # Create your views here.
 def namedtuplefetchall(cursor):
@@ -14,29 +15,37 @@ def namedtuplefetchall(cursor):
     return [nt_result(*row) for row in cursor.fetchall()]
 
 def createhistoritanamanpengguna(request):
-    form = CreateHistoriTanamanPenggunaForm(request.POST or None)
+    # form = CreateHistoriTanamanPenggunaForm(request.POST or None)
     cursor = connection.cursor()
+    cursor.execute("SET search_path TO public")
+    userEmail = request.session ['email']
     cursor.execute("SET SEARCH_PATH TO hidayb06")
-    userEmail = request.session['email']
-    if (form.is_valid() and request.method == 'POST'):
-        bibit = form.cleaned_data['bibit_tanaman']
-        jumlah = form.cleaned_data['jumlah']
-        xp = form.cleaned_data['xp']
-        waktu_awal = form.cleaned_data['waktu_awal']
-        waktu_selesai = form.cleaned_data['waktu_selesai']
-        if ((bibit is not None) and (jumlah is not None) and (xp is not None) and (waktu_awal is not None) and (waktu_selesai is not None)):
-            try:
-                cursor.execute("INSERT INTO HISTORI_TANAMAN (email,waktu_awal,id_bibit_tanaman) VALUES (%s,%s, (SELECT BIBIT_TANAMAN_MENGHASILKAN_HASIL_PANEN.ID_BIBIT_TANAMAN FROM BIBIT_TANAMAN_MENGHASILKAN_HASIL_PANEN, PRODUK WHERE PRODUK.ID = BIBIT_TANAMAN_MENGHASILKAN_HASIL_PANEN.ID_HASIL_PANEN AND PRODUK.NAMA = %s))", [userEmail,waktu_awal,bibit])
-                cursor.execute("INSERT INTO HISTORI_PRODUKSI (email,waktu_awal,waktu_selesai,jumlah,xp) VALUES (%s,%s,%s,%d,%d)", [userEmail,waktu_awal,waktu_selesai,jumlah,xp])
-                cursor.execute("SET SEARCH_PATH TO public")
-                return redirect("/readhistoritanamanpengguna")
-            except Exception as error:
-                print(error)
-        else:
+    cursor.execute("SELECT * FROM PRODUK WHERE PRODUK.ID IN (SELECT * FROM HASIL_PANEN)")
+    result = cursor.fetchall()
+    response = {}
+    response['hasil_panen'] = []
+    now = timezone.now()
+    for i in range(len(result)):
+        response['hasil_panen'].append([
+            result[i][0], result[i][1]
+        ])
+    if (request.method == 'POST'):
+        # bibit = form.cleaned_data['bibit_tanaman']
+        # jumlah = form.cleaned_data['jumlah']
+        # xp = form.cleaned_data['xp']
+        # waktu_awal = form.cleaned_data['waktu_awal']
+        # waktu_selesai = form.cleaned_data['waktu_selesai']
+        if (request.POST['id_bibit_tanaman'] == "" or request.POST['jumlah'] == "" or request.POST['xp'] == ""):
             message = "Masih ada yang kosong"
             return render(request, 'historitanaman/createHistoriTanamanPengguna.html', {'message':message})
-    else:
-        return render(request, 'historitanaman/createHistoriTanamanPengguna.html', {'form':form})
+        else:
+            try:
+                cursor.execute("INSERT INTO HISTORI_TANAMAN (email,waktu_awal,id_bibit_tanaman) VALUES (%s,%s, (SELECT BIBIT_TANAMAN_MENGHASILKAN_HASIL_PANEN.ID_BIBIT_TANAMAN FROM BIBIT_TANAMAN_MENGHASILKAN_HASIL_PANEN, PRODUK WHERE PRODUK.ID = BIBIT_TANAMAN_MENGHASILKAN_HASIL_PANEN.ID_HASIL_PANEN AND PRODUK.NAMA = %s))", [userEmail,now,request.POST['id_bibit_tanaman']])
+                cursor.execute("INSERT INTO HISTORI_PRODUKSI (email,waktu_awal,waktu_selesai,jumlah,xp) VALUES (%s,%s,%s,%d,%d)", [userEmail,now,now,request.POST['jumlah'],request.POST['xp']])
+                return redirect("/historitanaman/readhistoritanamanpengguna")
+            except Exception as error:
+                print(error)
+    return render(request, 'historitanaman/createHistoriTanamanPengguna.html', response)
 
 def readhistoritanamanadmin(request):
     cursor = connection.cursor()
