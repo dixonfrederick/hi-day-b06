@@ -15,28 +15,12 @@
       </div>
     </div>
     <div class="p-2 bg-light border">
-      <table class="table">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">No</th>
-            <th scope="col">ID Aset</th>
-            <th scope="col">Nama</th>
-            <th scope="col">Minimum Level</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for res in result %}
-            <tr>
-              <td>{{ forloop.counter }}</td>
-              <td>{{ res.id }}</td>
-              <td>{{ res.nama }}</td>
-              <td>{{ res.minimum_level }}</td>
-            </tr>
-            {% endfor %} 
-          <tr>
-          </tr>
-        </tbody>
-      </table>
+          <a class="btn btn-primary" href="listaset_dekorasi">Dekorasi</a>
+          <a class="btn btn-primary" href="listaset_bibittanaman">Bibit Tanaman</a>
+          <a class="btn btn-primary" href="listaset_kandang">Kandang</a>
+          <a class="btn btn-primary" href="listaset_hewan">Hewan</a>
+          <a class="btn btn-primary" href="listaset_alatproduksi">Alat Produksi</a>
+          <a class="btn btn-primary" href="listaset_petaksawah">Petak Sawah</a>
     </div>
   </div>
 </div>

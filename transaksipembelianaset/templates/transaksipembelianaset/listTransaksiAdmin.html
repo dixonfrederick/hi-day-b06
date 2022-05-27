@@ -11,7 +11,7 @@
   <div class="d-grid gap-3">
     <div class="p-2 bg-light border">
       <div class="mx-auto" style="width: 500px;">
-        <h1>List Koleksi</h1>
+        <h1>List Transaksi</h1>
       </div>
     </div>
     <div class="p-2 bg-light border">
@@ -21,6 +21,7 @@
             <th scope="col">No</th>
             <th scope="col">Email Pengguna</th>
             <th scope="col">Waktu Pembelian</th>
+            <th scope="col">Jenis</th>
             <th scope="col">Nama Aset</th>
             <th scope="col">Jumlah</th>
             <th scope="col">Total Harga</th>
@@ -32,6 +33,7 @@
               <td>{{ forloop.counter }}</td>
               <td>{{ res.email }}</td>
               <td>{{ res.waktu }}</td>
+              <td>{{ res.jenis }}</td>
               <td>{{ res.nama }}</td>
               <td>{{ res.jumlah }}</td>
               <td>{{ res.total_harga }}</td>

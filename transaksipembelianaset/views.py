@@ -17,7 +17,15 @@ def listtransaksi(request):
     if (role == "pengguna"):
         try:
             cursor.execute("SET SEARCH_PATH TO hidayb06")
-            cursor.execute("""SELECT TRANSAKSI_PEMBELIAN.EMAIL, WAKTU, NAMA, JUMLAH, HARGA_BELI * JUMLAH AS TOTAL_HARGA
+            cursor.execute("""SELECT ID_ASET, TRANSAKSI_PEMBELIAN.EMAIL, WAKTU, NAMA, JUMLAH, HARGA_BELI * JUMLAH AS TOTAL_HARGA,
+            CASE 
+            WHEN ID_ASET IN(SELECT ID_ASET FROM DEKORASI) THEN 'Dekorasi'
+            WHEN ID_ASET IN(SELECT ID_ASET FROM BIBIT_TANAMAN) THEN 'Bibit Tanaman'
+            WHEN ID_ASET IN(SELECT ID_ASET FROM KANDANG) THEN 'Kandang'
+            WHEN ID_ASET IN(SELECT ID_ASET FROM HEWAN) THEN 'Hewan'
+            WHEN ID_ASET IN(SELECT ID_ASET FROM ALAT_PRODUKSI) THEN 'Bibit Tanaman'
+            WHEN ID_ASET IN(SELECT ID_ASET FROM PETAK_SAWAH) THEN 'Petak Sawah'
+            END AS JENIS
             FROM ASET, KOLEKSI_ASET, TRANSAKSI_PEMBELIAN
             WHERE KOLEKSI_ASET.EMAIL = TRANSAKSI_PEMBELIAN.EMAIL AND ID_ASET = ID AND KOLEKSI_ASET.EMAIL = %s;""", [userEmail])
             result = namedtuplefetchall(cursor)
@@ -27,7 +35,15 @@ def listtransaksi(request):
     elif (role == "admin"):
         try:
             cursor.execute("SET SEARCH_PATH TO hidayb06")
-            cursor.execute("""SELECT TRANSAKSI_PEMBELIAN.EMAIL, WAKTU, NAMA, JUMLAH, HARGA_BELI * JUMLAH AS TOTAL_HARGA
+            cursor.execute("""SELECT ID_ASET, TRANSAKSI_PEMBELIAN.EMAIL, WAKTU, NAMA, JUMLAH, HARGA_BELI * JUMLAH AS TOTAL_HARGA,
+            CASE 
+            WHEN ID_ASET IN(SELECT ID_ASET FROM DEKORASI) THEN 'Dekorasi'
+            WHEN ID_ASET IN(SELECT ID_ASET FROM BIBIT_TANAMAN) THEN 'Bibit Tanaman'
+            WHEN ID_ASET IN(SELECT ID_ASET FROM KANDANG) THEN 'Kandang'
+            WHEN ID_ASET IN(SELECT ID_ASET FROM HEWAN) THEN 'Hewan'
+            WHEN ID_ASET IN(SELECT ID_ASET FROM ALAT_PRODUKSI) THEN 'Bibit Tanaman'
+            WHEN ID_ASET IN(SELECT ID_ASET FROM PETAK_SAWAH) THEN 'Petak Sawah'
+            END AS JENIS
             FROM ASET, KOLEKSI_ASET, TRANSAKSI_PEMBELIAN
             WHERE KOLEKSI_ASET.EMAIL = TRANSAKSI_PEMBELIAN.EMAIL AND ID_ASET = ID;""")
             result = namedtuplefetchall(cursor)
