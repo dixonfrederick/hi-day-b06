@@ -1,0 +1,101 @@
+{% extends 'home/baseAdmin.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lihat Lumbung</title>
+</head>
+<body>
+<h1>Detail Lumbung</h1>
+<br>
+<h5>Tabel Produk Hasil Panen</h5>
+<table>
+    <thead>
+    <tr>
+        <th>No.</th>
+        <th>Email Pemilik Lumbung</th>
+        <th>ID Produk</th>
+        <th>Nama Produk</th>
+        <th>Harga Jual</th>
+        <th>Sifat Produk</th>
+        <th>Jumlah Produk</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in hasil_panen %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ item.0 }}</td>
+        <td>{{ item.1 }}</td>
+        <td>{{ item.2 }}</td>
+        <td>{{ item.3 }}</td>
+        <td>{{ item.4 }}</td>
+        <td style="text-align: center" >{{ item.5 }}</td>
+
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<br>
+<h5>Tabel Produk Hewan</h5>
+<table>
+    <thead>
+    <tr>
+        <th>No.</th>
+        <th>Email Pemilik Lumbung</th>
+        <th>ID Produk</th>
+        <th>Nama Produk</th>
+        <th>Harga Jual</th>
+        <th>Sifat Produk</th>
+        <th>Jumlah Produk</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in produk_hewan %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ item.0 }}</td>
+        <td>{{ item.1 }}</td>
+        <td>{{ item.2 }}</td>
+        <td>{{ item.3 }}</td>
+        <td>{{ item.4 }}</td>
+        <td style="text-align: center">{{ item.5 }}</td>
+
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<br>
+<h5>Tabel Produk Makanan</h5>
+<table>
+    <thead>
+    <tr>
+        <th>No.</th>
+        <th>Email Pemilik Lumbung</th>
+        <th>ID Produk</th>
+        <th>Nama Produk</th>
+        <th>Harga Jual</th>
+        <th>Sifat Produk</th>
+        <th>Jumlah Produk</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in produk_makanan %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ item.0 }}</td>
+        <td>{{ item.1 }}</td>
+        <td>{{ item.2 }}</td>
+        <td>{{ item.3 }}</td>
+        <td>{{ item.4 }}</td>
+        <td style="text-align: center">{{ item.5 }}</td>
+
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>
+{% endblock content %}

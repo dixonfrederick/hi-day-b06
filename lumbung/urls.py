@@ -7,7 +7,5 @@ app_name = 'lumbung'
 
 urlpatterns = [
     path('home', home, name='home'),
-    path('readlumbungadmin', readlumbungadmin, name='readlumbungadmin'),
-    path('readlumbungpengguna', readlumbungpengguna, name='readlumbungpengguna'),
-    
+    path('readlumbung', readlumbung, name='readlumbung'),
 ]
