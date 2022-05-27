@@ -26,6 +26,7 @@ urlpatterns = [
     path('paketkoin/', include('paketkoin.urls')),
     path('transaksipembeliankoin/', include('transaksipembeliankoin.urls')),
     path('transaksiupgradelumbung/', include('transaksiupgradelumbung.urls')),
+    path('lumbung/', include('lumbung.urls')),
     path('historitanaman/', include('historitanaman.urls')),
     path('aset/', include('aset.urls')),
     path('koleksiaset/', include('koleksiaset.urls')),

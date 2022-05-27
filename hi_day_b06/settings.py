@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'paketkoin',
     'transaksipembeliankoin',
     'transaksiupgradelumbung',
+    'lumbung',
     'historitanaman',
     'aset',
     'koleksiaset',
