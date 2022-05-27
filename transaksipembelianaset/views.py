@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
 from django.db import connection
 from collections import namedtuple
+import datetime 
 
 # Create your views here.
 def namedtuplefetchall(cursor):
@@ -52,4 +53,16 @@ def listtransaksi(request):
         return render (request, 'transaksipembelianaset/listTransaksiAdmin.html', {'result': result})
 
 def buattransaksi(request):
-    return render (request, 'transaksipembelianaset/buattransaksi.html')
+    userEmail = request.session ['email']
+    cursor = connection.cursor()
+    cursor.execute("SET search_path TO public")
+    cursor.execute("SET search_path TO hidayb06")
+    cursor.execute("SELECT * FROM ASET")
+    result = namedtuplefetchall(cursor)
+    res = request.POST
+    print(res)
+    if (request.method == 'POST'):
+        cursor.execute("""INSERT INTO TRANSAKSI_PEMBELIAN
+        VALUES (%s, %s, %s, %s)""", [userEmail, datetime.datetime.now(), res.get('jumlah'), res.get('jenis_aset')[0:3].strip()] )
+    
+    return render (request, 'transaksipembelianaset/buattransaksi.html', {'result':result})

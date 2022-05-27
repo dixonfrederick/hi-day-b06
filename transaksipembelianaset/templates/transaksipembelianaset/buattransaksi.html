@@ -8,14 +8,18 @@
 
 {% block content %}
 <h1>Form Transaksi</h1>
+<form action="" method="POST">
+{% csrf_token %}
 <p>Jenis Aset</p>
 <select name="jenis_aset">
-    <option value="suksesjaya">suksesjaya</option>
-    <option value="sukamakmur">sukamakmur</option>
-    <option value="berkahselalu">berkahselalu</option>
-  </select>
+  {% for res in result %}
+    <option id = "id">{{ res.id }} - {{ res.nama }} - {{ res.harga_beli }}</option>
+  {% endfor %}
+</select>
 <p>Jumlah</p>
-<input type="text" name="jumlah">
+<input type="number" name="jumlah">
+<br>
 <br>
 <input type = "submit" value = "Beli"/>
+</form>
 {% endblock content %}
