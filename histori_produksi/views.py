@@ -101,7 +101,7 @@ def produksiProdukMakanan(request):
                 cursor.execute("INSERT INTO HISTORI_PRODUKSI_MAKANAN VALUES (%s, %s, %s, %s)", [email, dt_string, id_alat_produksi, request.POST['id_produk_makanan']])
                 return redirect ('/histori_produksi/historiprodukmakanan')
             else :        
-                response['message'] = "Anda tidak memiliki bibit yang cukup, silahkan membeli bibit terlebih dahulu"
+                response['message'] = "Anda tidak memiliki bahan yang cukup"
                 return render(request, 'histori_produksi/produksiProdukMakanan.html', response)
     else:
         return render(request, 'histori_produksi/produksiProdukMakanan.html', response)
