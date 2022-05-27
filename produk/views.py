@@ -224,8 +224,6 @@ def buatProduksi(request):
             cursor.execute("INSERT INTO PRODUKSI VALUES (%s, %s, %s, %s)", [request.POST['alat_produksi'], request.POST['id_produk_makanan'], durasi, request.POST['jumlah']])
             bahan = request.POST.getlist('bahan')
             jumlah_produk = request.POST.getlist('jumlah_produk')
-            print(bahan)
-            print(jumlah_produk)
             for i in range (len(bahan)):
                 cursor.execute("INSERT INTO PRODUK_DIBUTUHKAN_OLEH_PRODUK_MAKANAN VALUES (%s, %s, %s)", [request.POST['id_produk_makanan'], bahan[i], jumlah_produk[i]])     
             return redirect ('/produk/listproduksi')
